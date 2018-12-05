@@ -1,3 +1,2 @@
-//&&
-99
-"hello world"
+// comment
+123 "string" identity

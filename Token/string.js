@@ -1,3 +1,3 @@
-const reg = /^"\(\\"|\\\\|\\n|[^"]\)*"$/
+const reg = /"((?:\\"|\\\\|\\n|[^"])*)"/
 
 module.exports = reg

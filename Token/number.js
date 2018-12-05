@@ -1,3 +1,3 @@
-const reg = /^\d+$/
+const reg = /\d+/
 
 module.exports = reg
