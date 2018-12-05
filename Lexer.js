@@ -1,32 +1,37 @@
-const fs = require('fs')
-const path = require('path')
-
 const NumReg = require('./Token/number')
 const StrReg = require('./Token/string')
 const IdReg = require('./Token/identity')
 
-let hasMore = true
-
-
-const lineReader = require('readline').createInterface({
-  input: fs.createReadStream(path.join(__dirname, '__test__/example.js'))
-})
-/*
-lineReader.on('line', function(line) {
-  console.log('Line from file:', regexPat.exec(line))
-})
-*/
-
 class Lexer {
   constructor(reader) {
     this.hasMore = true
-    reader.on('line', this.lineNumberReader)
+    this.lineNo = 0
+    this.queue = []
+    this.reader = reader
   }
   lineNumberReader(line) {
-    console.log('Line from file:', line)
+    this.lineNo = this.lineNo + 1
+    console.log(`Line ${this.lineNo}: `, line)
+
+    let pos = 0
+    let endPos = line.length
+    while (pos < endPos) {
+      addToken
+    }
+  }
+  
+  addToken(lineNo, matcher) {
+    this.queue.push({
+      lineNo,
+      value:
+      type: 
+    })
+  }
+  read() {
+    this.reader.on('line', this.lineNumberReader.bind(this))
   }
 }
 
 Lexer.regexPat = new RegExp(`\\s*((\/\/.*)|(${NumReg.source})|(${StrReg.source})|(${IdReg.source}))?`)
 
-new Lexer(lineReader)
+module.exports = Lexer
