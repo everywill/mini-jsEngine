@@ -1,6 +1,6 @@
-const NumReg = require('../token/number')
-const StrReg = require('../token/string')
-const IdReg = require('../token/identity')
+const NumReg = require('./token/number')
+const StrReg = require('./token/string')
+const IdReg = require('./token/identity')
 
 const regexPat = `\\s*(?:(\/\/.*)|(${NumReg.source})|${StrReg.source}|(${IdReg.source}))?`
 
