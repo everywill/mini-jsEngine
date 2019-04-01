@@ -1,7 +1,7 @@
 const NumReg = require('./token/number')
 const StrReg = require('./token/string')
 const IdReg = require('./token/identifier')
-
+// eslint-disable-next-line
 const regexPat = `\\s*(?:(\/\/.*)|(${NumReg.source})|${StrReg.source}|(${IdReg.source}))?\\s*`
 
 const createToken = (matcher, lineNo) => {

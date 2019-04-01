@@ -11,9 +11,9 @@ class Parser extends Writable {
   }
 
   _write(chunk, encoding, callback) {
-    console.log('Writable write')
     const words = chunk;
-    console.log(words)
+    // console.log('Writable write')
+    // console.log(words)
     words.map((word) => {
       this.parserStrategy.run(word)
     })
@@ -21,7 +21,7 @@ class Parser extends Writable {
   }
 
   _final(callback) {
-    console.log('Writable final')
+    // console.log('Writable final')
     this.parserStrategy.end()
     callback()
   }
