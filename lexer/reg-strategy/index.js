@@ -1,6 +1,6 @@
 const NumReg = require('./token/number')
 const StrReg = require('./token/string')
-const IdReg = require('./token/identity')
+const IdReg = require('./token/identifier')
 
 const regexPat = `\\s*(?:(\/\/.*)|(${NumReg.source})|${StrReg.source}|(${IdReg.source}))?`
 
@@ -14,7 +14,7 @@ const createToken = (matcher) => {
     token.type = 'string'
     token.value = matcher[3]
   } else if (matcher[4] !== undefined){
-    token.type = 'identity'
+    token.type = 'identifier'
     token.value = matcher[4]
   }
   if (matcher[1] === undefined) {

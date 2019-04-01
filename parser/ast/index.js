@@ -22,7 +22,7 @@ class ASTList {
 
 class NumberLiteral extends ASTLeaf {
   get value() {
-    reutrn parseFloat(this.token.value)
+    return parseFloat(this.token.value)
   }
 }
 

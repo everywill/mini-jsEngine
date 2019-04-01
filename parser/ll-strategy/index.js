@@ -1,52 +1,35 @@
-const { Transform } = require('stream')
+const WAIT_FACTOR_TOKEN = 0;
+const WAIT_OPERATOR_TOKEN = 1;
 
-class Precedence {
-  constructor(value, isLeftAssoc) {
-    this.value = value
-    this.isLeftAssoc = isLeftAssoc
-  } 
-}
-
-const operators = {
-  '<': new Precedence(1, true),
-  '>': new Precedence(1, true),
-  '+': new Precedence(2, true),
-  '-': new Precedence(2, true),
-  '*': new Precedence(3, true),
-  '/': new Precedence(3, true),
-  '^': new Precedence(4, false),
-}
-
-const expression = () => {}
-
-const doShift = () => {}
-
-const rightIsExpr = () => {}
-
-function createParser(options, state) { 
-  function emitLine() {}
-  function queue() {}
-  function reset() {}
-
-  return new Transform({
-    
-  })
-}
-
-module.exports = cb => {
-  const state = {
-
+class OpPrecedenceParser {
+  constructor() {
+    this.queue = [];
   }
 
-  const options = {
-    cb,
-  }
-
-  return createParser(options, state).on('error', (err) => {
-    if (cb) {
-      cb(err)
+  expression() {
+    let right = this.factor()
+    let next
+    while ((next = this.nextOperator()) != null) {
+      right = this.doShift(right, next.value)
     }
-  })
+
+    return right
+  }
+
+  factor() {}
+
+  nextOperator() {}
+
+  doShift() {}
+
+  run(token) {
+    console.log('=== new token to parser ===')
+    console.log(token)
+    this.queue.push(token)
+  }
+  end() {
+    console.log('=== parser end has been invoked ===')
+  }
 }
 
-
+module.exports = new OpPrecedenceParser()
