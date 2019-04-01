@@ -2,9 +2,9 @@ const NumReg = require('./token/number')
 const StrReg = require('./token/string')
 const IdReg = require('./token/identifier')
 
-const regexPat = `\\s*(?:(\/\/.*)|(${NumReg.source})|${StrReg.source}|(${IdReg.source}))?`
+const regexPat = `\\s*(?:(\/\/.*)|(${NumReg.source})|${StrReg.source}|(${IdReg.source}))?\\s*`
 
-const createToken = (matcher) => {
+const createToken = (matcher, lineNo) => {
   const token = {}
   // console.log(matcher)
   if (matcher[2] !== undefined) {
@@ -19,21 +19,25 @@ const createToken = (matcher) => {
   }
   if (matcher[1] === undefined) {
     // not comment
+    token.lineNo = lineNo
+
     return token
   }
 }
 
-const run = (line) => {
+const run = (lineData) => {
+  let { content, lineNo } = lineData
+
   const queue = []
   let pos = 0
-  let endPos = line.length
+  let endPos = content.length
   let Regexp = new RegExp(regexPat, 'g')
 
   while (pos < endPos) {
-    const matcher = Regexp.exec(line)
+    const matcher = Regexp.exec(content)
     pos = Regexp.lastIndex
     if (matcher) {
-      const token = createToken(matcher)
+      const token = createToken(matcher, lineNo)
       token && queue.push(token)
     } else {
       throw new Error(`bad token at line: ${this.lineNo} near postion: ${pos}`)

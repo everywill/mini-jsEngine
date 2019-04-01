@@ -4,13 +4,13 @@ const runRegStrategy = require('./reg-strategy')
 class Lexer extends Transform {
   constructor(options) {
     super(Object.assign({}, options, {
-      readableObjectMode: true
+      objectMode: true
     }))
   }
   _transform(chunk, encoding, callback) {
-    const line = chunk.toString().trim()
+    const lineData = chunk
     // 词法分析
-    const queue = runRegStrategy(line)
+    const queue = runRegStrategy(lineData)
     callback(null, queue)
   }
 }

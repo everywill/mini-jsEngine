@@ -2,8 +2,20 @@ class ASTLeaf {
   constructor(token) {
     this.token = token
   }
+  [Symbol.iterator]() {
+    return [].values()
+  }
   toString() {
     return this.token.value
+  }
+  child() {
+    throw 'no child'
+  }
+  numChildren() {
+    return 0
+  }
+  location() {
+
   }
 }
 
@@ -17,6 +29,12 @@ class ASTList {
       s = s + child.toString()
     }
     return s + ')'
+  }
+  child(i) {
+    return this.children[i]
+  }
+  numChildren() {
+    return this.children.length
   }
 }
 

@@ -4,8 +4,11 @@ const splitting_re = /.*?(?:\r\n|\r|\n)|.*?$/g
 
 class ReadlineTransform extends Transform {
   constructor(options) {
-    super(options)
+    super(Object.assign({}, options, {
+      readableObjectMode: true,
+    }))
     this.lineBuffer = ''
+    this.lineNo = 0
   }
 
   _transform(chunk, encoding, callback) {
@@ -20,7 +23,10 @@ class ReadlineTransform extends Transform {
     const lines = this.lineBuffer.match(splitting_re)
 
     while(lines.length > 1) {
-      this.push(lines.shift())
+      this.push({
+        content: lines.shift(),
+        lineNo: ++this.lineNo,
+      })
     }
 
     this.lineBuffer = lines[0] || ''
@@ -30,7 +36,10 @@ class ReadlineTransform extends Transform {
 
   _flush(callback) {
     if (this.lineBuffer) {
-      this.push(this.lineBuffer)
+      this.push({
+        content: this.lineBuffer,
+        lineNo: ++this.lineNo,
+      })
       this.lineBuffer = ''
     }
 
