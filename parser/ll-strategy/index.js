@@ -1,8 +1,5 @@
 const { NumberLiteral, Name, BinaryExpr } = require('../ast')
 
-const WAIT_FACTOR_TOKEN = 0
-const WAIT_OPERATOR_TOKEN = 1
-
 class OpPrecedenceParser {
   constructor() {
     this.queue = []
@@ -31,7 +28,7 @@ class OpPrecedenceParser {
   * expressionGenerator() {
     let right = yield* this.factor()
     let next
-    if ((next = yield* this.nextOperator()) != null) {
+    while ((next = yield* this.nextOperator()) != null) {
       right = yield* this.doShift(right, next)
     }
 
@@ -42,8 +39,8 @@ class OpPrecedenceParser {
     let token = yield
     if (token.value === '(') {
       // 出现括号表达式
-      let e = this.expression()
-      let anotherToken = yield
+      let e = yield* this.expressionGenerator()
+      let anotherToken = yield* this.nextCachedToken()
       if (anotherToken.value === ')') {
         // 括号能匹配 返回表达式
         return e
@@ -62,12 +59,24 @@ class OpPrecedenceParser {
   }
 
   * nextOperator() {
-    let token = yield
-    if (token && token.type === 'identifier') {
-      return new Name(token)
+    let token = yield* this.nextCachedToken()
+
+    if (token && token.type === 'identifier' && this.operators[token.value]) {
+      return token
     } else {
+      this.queue.push(token)
       return null
     }
+  }
+
+  * nextCachedToken() {
+    let token
+    if (this.queue.length) {
+      token = this.queue.pop()
+    } else {
+      token = yield
+    }
+    return token
   }
 
   * doShift(left, op) {
@@ -76,8 +85,10 @@ class OpPrecedenceParser {
     while ((next = yield* this.nextOperator()) != null && this.rightIsExpr(op, next)) {
       right = yield* this.doShift(right, next)
     }
-
-    return new BinaryExpr([left, op, right])
+    this.queue.push(next)
+    // console.log('right in doShift: ')
+    // console.log(right)
+    return new BinaryExpr([left, new Name(op), right])
   }
 
   rightIsExpr(op, nextOp) {
@@ -96,7 +107,7 @@ class OpPrecedenceParser {
     console.log('=== parser end has been invoked ===')
     let result = this.run(null)
     // eslint-disable-next-line
-    console.log(result.value)
+    console.log(result.value.toString())
   }
 }
 
