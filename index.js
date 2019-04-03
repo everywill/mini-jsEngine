@@ -14,5 +14,5 @@ const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-ex
 SourceCode
   .pipe(new ReadlineTransform())
   .pipe(new Lexer())
-  // .pipe(new LogPassthrough({objectMode: true}))
   .pipe(new Parser())
+  // .pipe(new LogPassthrough({objectMode: true}))

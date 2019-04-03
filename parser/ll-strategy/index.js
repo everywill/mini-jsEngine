@@ -107,7 +107,8 @@ class OpPrecedenceParser {
     console.log('=== parser end has been invoked ===')
     let result = this.run(null)
     // eslint-disable-next-line
-    console.log(result.value.toString())
+    // console.log(result.value.toString())
+    return result.value
   }
 }
 

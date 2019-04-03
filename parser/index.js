@@ -1,7 +1,7 @@
-const { Writable } = require('stream')
+const { Transform } = require('stream')
 const llStrategy = require('./ll-strategy')
 
-class Parser extends Writable {
+class Parser extends Transform {
   constructor(options) {
     super(Object.assign({}, options, {
       objectMode: true,
@@ -10,7 +10,7 @@ class Parser extends Writable {
     this.parserStrategy = llStrategy
   }
 
-  _write(chunk, encoding, callback) {
+  _transform(chunk, encoding, callback) {
     const words = chunk;
     // console.log('Writable write')
     // console.log(words)
@@ -22,7 +22,8 @@ class Parser extends Writable {
 
   _final(callback) {
     // console.log('Writable final')
-    this.parserStrategy.end()
+    const result = this.parserStrategy.end()
+    this.push(result)
     callback()
   }
 }
