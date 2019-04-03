@@ -23,6 +23,9 @@ class ASTList {
   constructor(tokenList) {
     this.children = tokenList
   }
+  [Symbol.iterator]() {
+    return this.children.values()
+  }
   toString() {
     let s = '('
     for (let child of this.children) {
