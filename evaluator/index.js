@@ -6,13 +6,15 @@ class Evaluator extends Writable {
     super(Object.assign({}, options, {
       objectMode: true,
     }))
+
+    this.env = new Environment
   }
   _write(chunk, encoding, callback) {
     this.ast = chunk
     callback()
   }
   _final(callback) {
-    let r = this.ast.eval()
+    let r = this.ast.eval(this.env)
     console.log(r)
     callback()
   }
