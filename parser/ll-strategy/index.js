@@ -42,8 +42,8 @@ class OpPrecedenceParser {
       let e = yield* this.expressionGenerator()
       
       let anotherToken = yield* this.nextCachedToken()
-      console.log('anotherToken: ')
-      console.log(anotherToken)
+      // console.log('anotherToken: ')
+      // console.log(anotherToken)
       if (anotherToken.value === ')') {
         // 括号能匹配 返回表达式
         return e
@@ -74,8 +74,8 @@ class OpPrecedenceParser {
 
   * nextCachedToken() {
     let token
-    console.log('queue in nextCachedToken: ')
-    console.log(this.queue)
+    // console.log('queue in nextCachedToken: ')
+    // console.log(this.queue)
     if (this.queue.length) {
       token = this.queue.pop()
     } else {
