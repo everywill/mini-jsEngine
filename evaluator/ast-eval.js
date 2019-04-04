@@ -6,7 +6,7 @@ const {
   NegativeExpr,
   BlockStmnt,
   IfStmnt,
-  WhileStmnt 
+  WhileStmnt,
 } = require('../parser/ast')
 
 function mixin(clazz, behaviour) {
@@ -138,3 +138,14 @@ mixin(WhileStmnt, {
     }
   }
 })
+
+module.exports = {
+  StringLiteral,
+  NumberLiteral,
+  Name,
+  BinaryExpr,
+  NegativeExpr,
+  BlockStmnt,
+  IfStmnt,
+  WhileStmnt,
+}

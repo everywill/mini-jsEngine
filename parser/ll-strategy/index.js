@@ -1,4 +1,4 @@
-const { NumberLiteral, Name, BinaryExpr } = require('../ast')
+const { NumberLiteral, Name, BinaryExpr } = require('../../evaluator/ast-eval')
 
 class OpPrecedenceParser {
   constructor() {
@@ -40,7 +40,10 @@ class OpPrecedenceParser {
     if (token.value === '(') {
       // 出现括号表达式
       let e = yield* this.expressionGenerator()
+      
       let anotherToken = yield* this.nextCachedToken()
+      console.log('anotherToken: ')
+      console.log(anotherToken)
       if (anotherToken.value === ')') {
         // 括号能匹配 返回表达式
         return e
@@ -71,6 +74,8 @@ class OpPrecedenceParser {
 
   * nextCachedToken() {
     let token
+    console.log('queue in nextCachedToken: ')
+    console.log(this.queue)
     if (this.queue.length) {
       token = this.queue.pop()
     } else {
@@ -85,7 +90,6 @@ class OpPrecedenceParser {
     while ((next = yield* this.nextOperator()) != null && this.rightIsExpr(op, next)) {
       right = yield* this.doShift(right, next)
     }
-    this.queue.push(next)
     // console.log('right in doShift: ')
     // console.log(right)
     return new BinaryExpr([left, new Name(op), right])
