@@ -13,19 +13,32 @@ class OpPrecedenceParser {
       '^': { priority: 1, isLeftAssoc: false },
     }
 
-    let expression = this.expressionGenerator()
-    expression.next()
+    this.reserved = []
+
+    let program = this.programGenerator()
+    program.next()
 
     this.run = (token) => {
       // eslint-disable-next-line
       console.log('=== new token to parser ===')
       // eslint-disable-next-line
       console.log(token)
-      return expression.next(token)
+      return program.next(token)
     }
   }
 
-  * expressionGenerator() {
+  * programGenerator() {
+    let p = yield* this.expression()
+    return p
+  }
+
+  * blockStmnt() {}
+
+  * ifStmnt() {}
+
+  * whileStmnt() {}
+
+  * expression() {
     let right = yield* this.factor()
     let next
     while ((next = yield* this.nextOperator()) != null) {
@@ -39,7 +52,7 @@ class OpPrecedenceParser {
     let token = yield
     if (token.value === '(') {
       // 出现括号表达式
-      let e = yield* this.expressionGenerator()
+      let e = yield* this.expression()
       
       let anotherToken = yield* this.nextCachedToken()
       // console.log('anotherToken: ')
@@ -49,14 +62,16 @@ class OpPrecedenceParser {
         return e
       } else {
         // 否则解析出错
-        throw 'Parse Error: no matching bracket'
+        throw  new Error(`Parse Error: no matching for backet at line ${token.lineNo}`)
       } 
     } else {
       if (token.type === 'number') {
         // 单词是数字类型
         return new NumberLiteral(token)
-      } else {
-        throw 'Parse Error: no valid number '
+      }/* else if (token.type === 'identifier') {
+        
+      } */else {
+        throw new Error(`Parse Error: bad factor at line ${token.lineNo}: ${token.value}`)
       }
     }
   }

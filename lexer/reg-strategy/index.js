@@ -35,7 +35,12 @@ const run = (lineData) => {
 
   while (pos < endPos) {
     const matcher = Regexp.exec(content)
-    pos = Regexp.lastIndex
+    let newPos = Regexp.lastIndex
+    // console.log(`Regexp.lastIndex: ${newPos}`)
+    if (newPos === pos) {
+      throw new Error('can not match any token')
+    }
+    pos = newPos
     if (matcher) {
       const token = createToken(matcher, lineNo)
       token && queue.push(token)
