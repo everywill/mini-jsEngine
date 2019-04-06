@@ -1,16 +1,30 @@
-const { NumberLiteral, Name, BinaryExpr } = require('../../evaluator/ast-eval')
+const { 
+  StringLiteral,
+  NumberLiteral,
+  Name,
+  BinaryExpr,
+  NegativeExpr,
+  BlockStmnt,
+  IfStmnt,
+  WhileStmnt,
+} = require('../../evaluator/ast-eval')
 
 class OpPrecedenceParser {
   constructor() {
     this.queue = []
     this.operators = {
-      '<': { priority: 1, isLeftAssoc: true },
-      '>': { priority: 1, isLeftAssoc: true },
-      '+': { priority: 2, isLeftAssoc: true },
-      '-': { priority: 2, isLeftAssoc: true },
-      '*': { priority: 3, isLeftAssoc: true },
+      '=': { priority: 1, isLeftAssoc: false},
+      '<': { priority: 2, isLeftAssoc: true },
+      '<=': { priority: 2, isLeftAssoc: true },
+      '>': { priority: 2, isLeftAssoc: true },
+      '>=': { priority: 2, isLeftAssoc: true },
+      '==': { priority: 2, isLeftAssoc: true },
+      '+': { priority: 3, isLeftAssoc: true },
+      '-': { priority: 3, isLeftAssoc: true },
+      '*': { priority: 4, isLeftAssoc: true },
       '/': { priority: 4, isLeftAssoc: true },
-      '^': { priority: 1, isLeftAssoc: false },
+      '%': { priority: 4, isLeftAssoc: true },
+      '^': { priority: 5, isLeftAssoc: false },
     }
 
     this.reserved = []
@@ -28,16 +42,67 @@ class OpPrecedenceParser {
   }
 
   * programGenerator() {
-    let p = yield* this.expression()
+    let p = yield* this.statement()
     return p
   }
 
-  * blockStmnt() {}
+  * statement() {
+    let token = yield* this.nextToken()
+    if (token.value === 'if') {
+      let condition = yield* this.expression()
+      let thenBlock = yield* this.block()
+      let token = yield* this.nextToken()
+      if (token && token.value === 'else') {
+        let elseBlock = yield* this.block()
+        return new IfStmnt([condition, thenBlock, elseBlock])
+      } else {
+        this.queue.push(token)
+        return new IfStmnt([condition, thenBlock])
+      }
+    } else if (token.value === 'while') {
+      let condition = yield* this.expression()
+      let body = yield* this.block()
+      return new WhileStmnt([condition, body])
+    } else {
+      this.queue.push(token)
+      let e = yield* this.expression()
+      return e
+    }
+  }
 
-  * ifStmnt() {}
+  // "{" [ statement ] {(";" | EOL) [ statement ]} "}"
+  * block() {
+    let statements = []
 
-  * whileStmnt() {}
+    let token = yield* this.nextToken()
+    if (token.value === '{') {
+      // 代码块开始
+      let s = yield* this.statement()
+      statements.push(s)
 
+      let next
+      while ((next = yield* this.nextToken()) != null) {
+        // ; 分割的statement 
+        if (next.value === ';') {
+          s = yield* this.statement
+          statements.push(s)
+        } else {
+          this.queue.push(next)
+          break
+        }
+      }
+
+      let anotherToken = yield* this.nextToken()
+      if (anotherToken.value === '}') {
+        // 代码块结束
+        return new BlockStmnt([statements])
+      } else {
+        throw new Error(`Parse Error: no matching for backet ${token.value} at line ${token.lineNo}`)
+      }
+    }
+  }
+
+  // factor { OP factor }
   * expression() {
     let right = yield* this.factor()
     let next
@@ -48,13 +113,27 @@ class OpPrecedenceParser {
     return right
   }
 
+  // "-" primary | primary
   * factor() {
-    let token = yield
+    let token = yield* this.nextToken()
+    if (token.value === '-') {
+      let p = yield* this.primary()
+      return new NegativeExpr([new Name(token), p])
+    } else {
+      this.queue.push(token)
+      let p = yield* this.primary()
+      return p
+    }
+  }
+
+  // "(" expr ")" | NUMBER | IDENTIFIER | STRING
+  * primary() {
+    let token = yield* this.nextToken()
     if (token.value === '(') {
-      // 出现括号表达式
+      // "(" expr ")"
       let e = yield* this.expression()
       
-      let anotherToken = yield* this.nextCachedToken()
+      let anotherToken = yield* this.nextToken()
       // console.log('anotherToken: ')
       // console.log(anotherToken)
       if (anotherToken.value === ')') {
@@ -62,22 +141,24 @@ class OpPrecedenceParser {
         return e
       } else {
         // 否则解析出错
-        throw  new Error(`Parse Error: no matching for backet at line ${token.lineNo}`)
+        throw  new Error(`Parse Error: no matching for backet ${token.value} at line ${token.lineNo}`)
       } 
+    } else if (token.type === 'number') {
+      // NUMBER
+      return new NumberLiteral(token)
+    } else if (token.type === 'identifier') {
+      // IDENTIFIER
+      return new Name(token)
+    } else if (token.type === 'string') {
+      // STRING
+      return new StringLiteral(token)
     } else {
-      if (token.type === 'number') {
-        // 单词是数字类型
-        return new NumberLiteral(token)
-      }/* else if (token.type === 'identifier') {
-        
-      } */else {
-        throw new Error(`Parse Error: bad factor at line ${token.lineNo}: ${token.value}`)
-      }
+      throw new Error(`Parse Error: bad factor at line ${token.lineNo}: ${token.value}`)
     }
   }
 
   * nextOperator() {
-    let token = yield* this.nextCachedToken()
+    let token = yield* this.nextToken()
 
     if (token && token.type === 'identifier' && this.operators[token.value]) {
       return token
@@ -87,9 +168,9 @@ class OpPrecedenceParser {
     }
   }
 
-  * nextCachedToken() {
+  * nextToken() {
     let token
-    // console.log('queue in nextCachedToken: ')
+    // console.log('queue in nextToken: ')
     // console.log(this.queue)
     if (this.queue.length) {
       token = this.queue.pop()
@@ -102,8 +183,13 @@ class OpPrecedenceParser {
   * doShift(left, op) {
     let right = yield* this.factor()
     let next
-    while ((next = yield* this.nextOperator()) != null && this.rightIsExpr(op, next)) {
-      right = yield* this.doShift(right, next)
+    while ((next = yield* this.nextOperator()) != null) {
+      if (this.rightIsExpr(op, next)) {
+        right = yield* this.doShift(right, next)
+      } else {
+        this.queue.push(next)
+        break
+      }
     }
     // console.log('right in doShift: ')
     // console.log(right)
@@ -126,7 +212,7 @@ class OpPrecedenceParser {
     console.log('=== parser end has been invoked ===')
     let result = this.run(null)
     // eslint-disable-next-line
-    // console.log(result.value.toString())
+    console.log(result.value.toString())
     return result.value
   }
 }

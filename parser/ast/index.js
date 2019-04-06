@@ -100,7 +100,7 @@ class NegativeExpr extends ASTList {
     return this.child(1)
   }
   toString() {
-    return `-${this.operand()}`
+    return `-${this.operand}`
   }
 }
 
