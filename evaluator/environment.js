@@ -6,7 +6,7 @@ class Environment {
     this.values[key] = value
   }
   get(key) {
-    return this.valuess[key]
+    return this.values[key]
   }
 }
 

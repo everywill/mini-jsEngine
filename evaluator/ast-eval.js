@@ -117,7 +117,7 @@ mixin(IfStmnt, {
       return this.thenBlock.eval(env)
     } else {
       let b = this.elseBlock
-      if (b) {
+      if (b == null) {
         return 0
       } else {
         return b.eval(env)
