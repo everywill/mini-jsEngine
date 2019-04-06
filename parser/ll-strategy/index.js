@@ -47,24 +47,21 @@ class OpPrecedenceParser {
   }
 
   * statement() {
-    let token = yield* this.nextToken()
-    if (token.value === 'if') {
+    if (yield* this.nextIsToken('if')) {
       let condition = yield* this.expression()
       let thenBlock = yield* this.block()
-      let token = yield* this.nextToken()
-      if (token && token.value === 'else') {
+      
+      if (yield* this.nextIsToken('else')) {
         let elseBlock = yield* this.block()
         return new IfStmnt([condition, thenBlock, elseBlock])
       } else {
-        this.queue.push(token)
         return new IfStmnt([condition, thenBlock])
       }
-    } else if (token.value === 'while') {
+    } else if (yield* this.nextIsToken('while')) {
       let condition = yield* this.expression()
       let body = yield* this.block()
       return new WhileStmnt([condition, body])
     } else {
-      this.queue.push(token)
       let e = yield* this.expression()
       return e
     }
@@ -80,25 +77,20 @@ class OpPrecedenceParser {
       let s = yield* this.statement()
       statements.push(s)
 
-      let next
-      while ((next = yield* this.nextToken()) != null) {
+      while (yield* this.nextIsToken(';')) {
         // ; 分割的statement 
-        if (next.value === ';') {
-          s = yield* this.statement
-          statements.push(s)
-        } else {
-          this.queue.push(next)
-          break
-        }
+        s = yield* this.statement()
+        statements.push(s)
       }
 
-      let anotherToken = yield* this.nextToken()
-      if (anotherToken.value === '}') {
+      if (yield* this.nextIsToken('}')) {
         // 代码块结束
         return new BlockStmnt([statements])
       } else {
         throw new Error(`Parse Error: no matching for backet ${token.value} at line ${token.lineNo}`)
       }
+    } else {
+      return null
     }
   }
 
@@ -178,6 +170,16 @@ class OpPrecedenceParser {
       token = yield
     }
     return token
+  }
+
+  * nextIsToken(name) {
+    let next = yield* this.nextToken()
+    if (next && next.value === name) {
+      return true
+    } else {
+      this.queue.push(next)
+      return false
+    }
   }
 
   * doShift(left, op) {
