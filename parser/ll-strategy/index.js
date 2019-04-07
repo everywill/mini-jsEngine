@@ -27,7 +27,7 @@ class OpPrecedenceParser {
       '^': { priority: 5, isLeftAssoc: false },
     }
 
-    this.reserved = []
+    this.reserved = ['if', 'else', 'while', 'func']
 
     let program = this.programGenerator()
     program.next()
@@ -40,7 +40,7 @@ class OpPrecedenceParser {
       return program.next(token)
     }
   }
-
+  // [ statement ] (";" | EOL)
   * programGenerator() {
     let statements = []
     let s = yield* this.statement()
@@ -52,7 +52,7 @@ class OpPrecedenceParser {
     }
     return statements
   }
-
+  // "if" expr block [ "else" block ]| "while" expr block| expression
   * statement() {
     if (yield* this.nextIsToken('if')) {
       let condition = yield* this.expression()
@@ -124,6 +124,14 @@ class OpPrecedenceParser {
       return p
     }
   }
+  // "func" IDENTIFIER paramlist block
+  * func() {}
+
+  * param() {}
+
+  * params() {}
+
+  * paramlist() {}
 
   // "(" expr ")" | NUMBER | IDENTIFIER | STRING
   * primary() {
@@ -166,7 +174,6 @@ class OpPrecedenceParser {
       return null
     }
   }
-
   * nextToken() {
     let token
     // console.log('queue in nextToken: ')
@@ -178,7 +185,6 @@ class OpPrecedenceParser {
     }
     return token
   }
-
   * nextIsToken(name) {
     let next = yield* this.nextToken()
     if (next && next.value === name) {
@@ -188,7 +194,6 @@ class OpPrecedenceParser {
       return false
     }
   }
-
   * doShift(left, op) {
     let right = yield* this.factor()
     let next
@@ -204,7 +209,6 @@ class OpPrecedenceParser {
     // console.log(right)
     return new BinaryExpr([left, new Name(op), right])
   }
-
   rightIsExpr(op, nextOp) {
     const opInfo = this.operators[op.value]
     const nextOpInfo = this.operators[nextOp.value]
@@ -222,7 +226,7 @@ class OpPrecedenceParser {
     let result = this.run(null)
     // eslint-disable-next-line
     console.log('result of parser:')
-    console.log(result.value)
+    console.log(result.value.toString())
     return result.value
   }
 }

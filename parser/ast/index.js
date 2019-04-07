@@ -143,6 +143,24 @@ class WhileStmnt extends ASTList {
   }
 }
 
+class funcStmnt extends ASTList {
+  constructor(tokenList) {
+    super(tokenList)
+  }
+  get name() {
+    return this.child(0).name
+  }
+  get parameters() {
+    return this.child(1)
+  }
+  get body() {
+    return this.child(2)
+  }
+  toString() {
+    return `(def ${this.name} ${this.parameters} ${this.body})`
+  }
+}
+
 module.exports = {
   StringLiteral,
   NumberLiteral,
@@ -152,4 +170,5 @@ module.exports = {
   BlockStmnt,
   IfStmnt,
   WhileStmnt,
+  funcStmnt,
 }
