@@ -3,7 +3,7 @@ class ASTLeaf {
     this.token = token
   }
   [Symbol.iterator]() {
-    return [].values()
+    return [][Symbol.iterator]()
   }
   toString() {
     return this.token.value
@@ -24,7 +24,7 @@ class ASTList {
     this.children = tokenList
   }
   [Symbol.iterator]() {
-    return this.children.values()
+    return this.children[Symbol.iterator]()
   }
   toString() {
     let s = '('

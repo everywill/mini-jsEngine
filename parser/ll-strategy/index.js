@@ -42,8 +42,15 @@ class OpPrecedenceParser {
   }
 
   * programGenerator() {
-    let p = yield* this.statement()
-    return p
+    let statements = []
+    let s = yield* this.statement()
+    statements.push(s)
+    while (yield* this.nextIsToken(';')) {
+      // ; 分割的statement 
+      s = yield* this.statement()
+      statements.push(s)
+    }
+    return statements
   }
 
   * statement() {
@@ -85,7 +92,7 @@ class OpPrecedenceParser {
 
       if (yield* this.nextIsToken('}')) {
         // 代码块结束
-        return new BlockStmnt([statements])
+        return new BlockStmnt(statements)
       } else {
         throw new Error(`Parse Error: no matching for backet ${token.value} at line ${token.lineNo}`)
       }
@@ -214,7 +221,8 @@ class OpPrecedenceParser {
     console.log('=== parser end has been invoked ===')
     let result = this.run(null)
     // eslint-disable-next-line
-    console.log(result.value.toString())
+    console.log('result of parser:')
+    console.log(result.value)
     return result.value
   }
 }

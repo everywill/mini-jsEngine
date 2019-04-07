@@ -10,12 +10,16 @@ class Evaluator extends Writable {
     this.env = new Environment
   }
   _write(chunk, encoding, callback) {
-    this.ast = chunk
+    this.astList = chunk
     callback()
   }
   _final(callback) {
-    let r = this.ast.eval(this.env)
-    console.log(r)
+    let r
+    this.astList.map((ast) => {
+      r = ast.eval(this.env)
+      console.log(`result: ${r}`)
+    })
+  
     callback()
   }
 }

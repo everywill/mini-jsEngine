@@ -23,10 +23,16 @@ class ReadlineTransform extends Transform {
     const lines = this.lineBuffer.match(splitting_re)
 
     while(lines.length > 1) {
-      this.push({
-        content: lines.shift(),
-        lineNo: ++this.lineNo,
-      })
+      let content = lines.shift()
+      this.lineNo ++
+      
+      if (['\r\n', '\r', '\n'].indexOf(content) === -1) {
+        // console.log(`content: ${content}`)
+        this.push({
+          content,
+          lineNo: this.lineNo,
+        })
+      }
     }
 
     this.lineBuffer = lines[0] || ''
