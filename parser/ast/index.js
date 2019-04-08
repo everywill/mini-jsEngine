@@ -77,6 +77,24 @@ class Name extends ASTLeaf {
   }
 }
 
+class ParameterList extends ASTList {
+  constructor(tokenList) {
+    super(tokenList)
+  }
+  name(i) {
+    return this.child(i).name
+  }
+  get size() {
+    return this.numChildren()
+  }
+}
+
+class Postfix extends ASTList {
+  constructor(tokenList) {
+    super(tokenList)
+  }
+}
+
 class BinaryExpr extends ASTList {
   constructor(tokenList) {
     super(tokenList)
@@ -165,6 +183,8 @@ module.exports = {
   StringLiteral,
   NumberLiteral,
   Name,
+  ParameterList,
+  Postfix,
   BinaryExpr,
   NegativeExpr,
   BlockStmnt,

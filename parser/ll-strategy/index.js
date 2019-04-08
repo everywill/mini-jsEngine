@@ -2,11 +2,14 @@ const {
   StringLiteral,
   NumberLiteral,
   Name,
+  ParameterList,
+  Postfix,
   BinaryExpr,
   NegativeExpr,
   BlockStmnt,
   IfStmnt,
   WhileStmnt,
+  funcStmnt,
 } = require('../../evaluator/ast-eval')
 
 class OpPrecedenceParser {
@@ -45,14 +48,15 @@ class OpPrecedenceParser {
     let statements = []
     let s = yield* this.statement()
     statements.push(s)
+    // ; 分割的statement
     while (yield* this.nextIsToken(';')) {
-      // ; 分割的statement 
+      
       s = yield* this.statement()
       statements.push(s)
     }
     return statements
   }
-  // "if" expr block [ "else" block ]| "while" expr block| expression
+  // "if" expr block [ "else" block ] | "while" expr block | func |expression
   * statement() {
     if (yield* this.nextIsToken('if')) {
       let condition = yield* this.expression()
@@ -68,6 +72,9 @@ class OpPrecedenceParser {
       let condition = yield* this.expression()
       let body = yield* this.block()
       return new WhileStmnt([condition, body])
+    } else if (yield* this.nextIsToken('func')) {
+      let f = yield* this.funcStmnt()
+      return f
     } else {
       let e = yield* this.expression()
       return e
@@ -125,13 +132,52 @@ class OpPrecedenceParser {
     }
   }
   // "func" IDENTIFIER paramlist block
-  * func() {}
+  * func() {
+    let name
+    let paramList
+    let body
+    // IDENTIFIER
+    let token = yield* this.nextToken()
+    if (token.type === 'identifier') {
+      name = new Name(token)
+    } else {
+      throw new Error(`Parse Error: bad func name ${token.value} at line ${token.lineNo}`)
+    }
 
-  * param() {}
+    paramList = yield* this.paramlist()
+    body = yield* this.block()
 
-  * params() {}
-
-  * paramlist() {}
+    return new funcStmnt([name, paramList, body])
+  }
+  // "(" [ param { "," param } ] ")"
+  * paramlist() {
+    let params = []
+    let token = yield* this.nextToken()
+    if (token.value === '(') {
+      let next
+      while((next = yield* this.param()) !== null) {
+        params.push(next)
+        if (!this.nextIsToken(',')) {
+          break
+        }
+      }
+      if (this.nextIsToken(')')) {
+        return new ParameterList(params)
+      } else {
+        throw new Error(`Parse Error: no matching for backet ${token.value} at line ${token.lineNo}`)
+      }
+    }
+  }
+  // IDENTIFIER
+  * param() {
+    let token = yield* this.nextToken()
+    if (token.type === 'identifier') {
+      return new Name(token)
+    } else {
+      this.queue.push(token)
+      return null
+    }
+  }
 
   // "(" expr ")" | NUMBER | IDENTIFIER | STRING
   * primary() {
