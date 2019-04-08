@@ -1,5 +1,5 @@
 const { Writable } = require('stream')
-const Environment = require('./environment')
+const { Environment } = require('./environment')
 
 class Evaluator extends Writable {
   constructor(options) {
