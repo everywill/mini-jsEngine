@@ -2,11 +2,14 @@ const {
   StringLiteral,
   NumberLiteral,
   Name,
+  ParameterList,
+  Postfix,
   BinaryExpr,
   NegativeExpr,
   BlockStmnt,
   IfStmnt,
   WhileStmnt,
+  funcStmnt,
 } = require('../parser/ast')
 
 function mixin(clazz, behaviour) {
@@ -143,9 +146,12 @@ module.exports = {
   StringLiteral,
   NumberLiteral,
   Name,
+  ParameterList,
+  Postfix,
   BinaryExpr,
   NegativeExpr,
   BlockStmnt,
   IfStmnt,
   WhileStmnt,
+  funcStmnt,
 }

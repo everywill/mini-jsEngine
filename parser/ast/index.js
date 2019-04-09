@@ -175,7 +175,7 @@ class funcStmnt extends ASTList {
     return this.child(2)
   }
   toString() {
-    return `(def ${this.name} ${this.parameters} ${this.body})`
+    return `(function ${this.name} ${this.parameters} ${this.body})`
   }
 }
 

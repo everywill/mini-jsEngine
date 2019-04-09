@@ -73,7 +73,7 @@ class OpPrecedenceParser {
       let body = yield* this.block()
       return new WhileStmnt([condition, body])
     } else if (yield* this.nextIsToken('func')) {
-      let f = yield* this.funcStmnt()
+      let f = yield* this.func()
       return f
     } else {
       let e = yield* this.expression()
@@ -157,11 +157,11 @@ class OpPrecedenceParser {
       let next
       while((next = yield* this.param()) !== null) {
         params.push(next)
-        if (!this.nextIsToken(',')) {
+        if ((yield* this.nextIsToken(',')) === false) {
           break
         }
       }
-      if (this.nextIsToken(')')) {
+      if (yield* this.nextIsToken(')')) {
         return new ParameterList(params)
       } else {
         throw new Error(`Parse Error: no matching for backet ${token.value} at line ${token.lineNo}`)
