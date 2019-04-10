@@ -1,42 +1,56 @@
-const { 
-  StringLiteral,
-  NumberLiteral,
-  Name,
-  ParameterList,
-  Postfix,
-  BinaryExpr,
-  NegativeExpr,
-  BlockStmnt,
-  IfStmnt,
-  WhileStmnt,
-  FuncStmnt,
-} = require('../parser/ast')
+const { ASTLeaf, ASTList } = require('./root-type')
 
-function mixin(clazz, behaviour) {
-  const instanceKeys = Reflect.ownKeys(behaviour)
-  for (let property of instanceKeys) {
-    Object.defineProperty(clazz.prototype, property, { value: behaviour[property] })
+class StringLiteral extends ASTLeaf {
+  constructor(token) {
+    super(token)
+  }
+  get value() {
+    return this.token.value
+  }
+  eval() {
+    return this.value
   }
 }
 
-mixin(StringLiteral, {
-  eval: function() {
+class NumberLiteral extends ASTLeaf {
+  constructor(token) {
+    super(token)
+  }
+  get value() {
+    return parseFloat(this.token.value)
+  }
+  eval() {
     return this.value
   }
-})
-mixin(NumberLiteral, {
-  eval: function() {
-    return this.value
+}
+
+class Name extends ASTLeaf {
+  constructor(token) {
+    super(token)
   }
-})
-mixin(Name, {
-  eval: function(env) {
+  get name() {
+    return this.token.value
+  }
+  eval(env) {
     let value = env.get(this.name)
     return value
   }
-})
-mixin(BinaryExpr, {
-  eval: function(env) {
+}
+
+class BinaryExpr extends ASTList {
+  constructor(tokenList) {
+    super(tokenList)
+  }
+  get left() {
+    return this.child(0)
+  }
+  get operator() {
+    return this.child(1)
+  }
+  get right() {
+    return this.child(2)
+  }
+  eval(env) {
     let op = this.operator.name
     if (op === '=') {
       let right = this.right.eval(env)
@@ -48,8 +62,8 @@ mixin(BinaryExpr, {
 
       return this.computeOp(left, op, right)
     }
-  },
-  computeAssign: function(env, rvalue) {
+  }
+  computeAssign(env, rvalue) {
     let left = this.left
     if (left instanceof Name) {
       env.put(left.name, rvalue)
@@ -57,8 +71,8 @@ mixin(BinaryExpr, {
     } else {
       throw 'invalid assignment'
     }
-  },
-  computeOp: function(lvalue, op, rvalue) {
+  }
+  computeOp(lvalue, op, rvalue) {
     if (typeof lvalue === 'number' && typeof rvalue === 'number') {
       return this.computeNumber(lvalue, op, rvalue)
     } else {
@@ -71,8 +85,8 @@ mixin(BinaryExpr, {
         throw 'bad type'
       }
     }
-  },
-  computeNumber: function(lvalue, op, rvalue) {
+  }
+  computeNumber(lvalue, op, rvalue) {
     if (op === '+') {
       return lvalue + rvalue
     } else if (op === '-') {
@@ -93,9 +107,19 @@ mixin(BinaryExpr, {
       throw 'invalid operator'
     }
   }
-})
-mixin(NegativeExpr, {
-  eval: function(env) {
+}
+
+class NegativeExpr extends ASTList {
+  constructor(tokenList) {
+    super(tokenList)
+  }
+  get operand() {
+    return this.child(1)
+  }
+  toString() {
+    return `-${this.operand}`
+  }
+  eval(env) {
     let v = this.operand.eval(env)
     if (typeof v === 'number') {
       return -v
@@ -103,18 +127,38 @@ mixin(NegativeExpr, {
       throw 'bad type for -'
     }
   }
-})
-mixin(BlockStmnt, {
-  eval: function(env) {
+}
+
+class BlockStmnt extends ASTList {
+  constructor(tokenList) {
+    super(tokenList)
+  }
+  eval(env) {
     let result = 0
     for (let stmnt of this) {
       result = stmnt.eval(env)
     }
     return result
   }
-})
-mixin(IfStmnt, {
-  eval: function(env) {
+}
+
+class IfStmnt extends ASTList {
+  constructor(tokenList) {
+    super(tokenList)
+  }
+  get condition() {
+    return this.child(0)
+  }
+  get thenBlock() {
+    return this.child(1)
+  }
+  get elseBlock() {
+    return this.numChildren() > 2 ? this.child(2) : null
+  }
+  toString() {
+    return `(if ${this.condition} ${this.thenBlock} else ${this.elseBlock})`
+  }
+  eval(env) {
     let condition = this.condition.eval(env)
     if (condition != false) {
       return this.thenBlock.eval(env)
@@ -127,9 +171,22 @@ mixin(IfStmnt, {
       }
     }
   }
-})
-mixin(WhileStmnt, {
-  eval: function(env) {
+}
+
+class WhileStmnt extends ASTList {
+  constructor(tokenList) {
+    super(tokenList)
+  }
+  get condition() {
+    return this.child(0)
+  }
+  get body() {
+    return this.child(1)
+  }
+  toString() {
+    return `(while ${this.condition} ${this.body})`
+  }
+  eval(env) {
     let result = 0
     for(;;) {
       let condition = this.condition.eval(env)
@@ -140,18 +197,15 @@ mixin(WhileStmnt, {
       }
     }
   }
-})
+}
 
 module.exports = {
   StringLiteral,
   NumberLiteral,
   Name,
-  ParameterList,
-  Postfix,
   BinaryExpr,
   NegativeExpr,
   BlockStmnt,
   IfStmnt,
   WhileStmnt,
-  FuncStmnt,
 }

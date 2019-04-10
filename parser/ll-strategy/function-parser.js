@@ -3,7 +3,7 @@ const {
   ParameterList,
   Postfix,
   FuncStmnt,
-} = require('../../evaluator/ast-eval')
+} = require('../../ast')
 
 const OpPrecedenceParser = require('./op-precedence-parser')
 

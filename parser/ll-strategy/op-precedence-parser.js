@@ -2,15 +2,12 @@ const {
   StringLiteral,
   NumberLiteral,
   Name,
-  ParameterList,
-  Postfix,
   BinaryExpr,
   NegativeExpr,
   BlockStmnt,
   IfStmnt,
   WhileStmnt,
-  funcStmnt,
-} = require('../../evaluator/ast-eval')
+} = require('../../ast')
 
 class OpPrecedenceParser {
   constructor() {
