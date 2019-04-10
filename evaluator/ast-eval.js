@@ -9,7 +9,7 @@ const {
   BlockStmnt,
   IfStmnt,
   WhileStmnt,
-  funcStmnt,
+  FuncStmnt,
 } = require('../parser/ast')
 
 function mixin(clazz, behaviour) {
@@ -153,5 +153,5 @@ module.exports = {
   BlockStmnt,
   IfStmnt,
   WhileStmnt,
-  funcStmnt,
+  FuncStmnt,
 }

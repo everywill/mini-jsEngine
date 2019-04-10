@@ -1,4 +1,4 @@
-class Environment {
+class BasicEnv {
   constructor() {
     this.values = {}
   }
@@ -10,7 +10,7 @@ class Environment {
   }
 }
 
-class NestedNev extends Environment {
+class NestedNev extends BasicEnv {
   constructor(env) {
     super()
     this.outer = env
@@ -49,6 +49,6 @@ class NestedNev extends Environment {
 }
 
 module.exports = {
-  Environment,
+  BasicEnv,
   NestedNev,
 }
