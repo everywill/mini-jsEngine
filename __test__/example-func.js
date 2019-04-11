@@ -1,3 +1,3 @@
 func test (a) {
-  c = a
+  a
 }

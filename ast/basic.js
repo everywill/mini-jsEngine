@@ -32,6 +32,7 @@ class Name extends ASTLeaf {
     return this.token.value
   }
   eval(env) {
+    // 对nestEnv同样适用
     let value = env.get(this.name)
     return value
   }
@@ -153,7 +154,7 @@ class IfStmnt extends ASTList {
     return this.child(1)
   }
   get elseBlock() {
-    return this.numChildren() > 2 ? this.child(2) : null
+    return this.numChildren > 2 ? this.child(2) : null
   }
   toString() {
     return `(if ${this.condition} ${this.thenBlock} else ${this.elseBlock})`

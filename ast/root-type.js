@@ -5,17 +5,17 @@ class ASTLeaf {
   [Symbol.iterator]() {
     return [][Symbol.iterator]()
   }
-  toString() {
-    return this.token.value
+  get numChildren() {
+    return 0
+  }
+  get location() {
+    return `at line ${this.token.lineNo}`
   }
   child() {
     throw 'no child'
   }
-  numChildren() {
-    return 0
-  }
-  location() {
-    return `at line ${this.token.lineNo}`
+  toString() {
+    return this.token.value
   }
 }
 
@@ -26,6 +26,18 @@ class ASTList {
   [Symbol.iterator]() {
     return this.children[Symbol.iterator]()
   }
+  get numChildren() {
+    return this.children.length
+  }
+  get location() {
+    for (let child of this.children) {
+      let l = child.location()
+      if (l != null) {
+        return l
+      }
+    }
+    return null
+  }
   toString() {
     let s = '('
     for (let child of this.children) {
@@ -35,18 +47,6 @@ class ASTList {
   }
   child(i) {
     return this.children[i]
-  }
-  numChildren() {
-    return this.children.length
-  }
-  location() {
-    for (let child of this.children) {
-      let l = child.location()
-      if (l != null) {
-        return l
-      }
-    }
-    return null
   }
 }
 

@@ -1,4 +1,4 @@
-const basicNodes = require('./basic')
-const functionNodes = require('./function')
+const basicAST = require('./basic')
+const functionAST = require('./function')
 
-module.exports = Object.assign({}, basicNodes, functionNodes)
+module.exports = Object.assign({}, basicAST, functionAST)

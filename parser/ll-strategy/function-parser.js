@@ -1,7 +1,7 @@
 const { 
   Name,
+  Arguments,
   ParameterList,
-  Postfix,
   FuncStmnt,
 } = require('../../ast')
 
@@ -68,7 +68,7 @@ class FunctionParser extends OpPrecedenceParser {
         }
       }
       if (yield* this.nextIsToken(')')) {
-        return new Postfix(args)
+        return new Arguments(args)
       } else {
         throw new Error(`Parse Error: no matching for backet ${token.value} at line ${token.lineNo}`)
       }
