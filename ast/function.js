@@ -1,21 +1,21 @@
 const { ASTList } = require('./root-type')
-const { NestedNev } = require('../evaluator/environment')
+const { NestedEnv } = require('../evaluator/environment')
 const hashcode = require('../utils/hashcode')
 
 class FunctionEntity {
   constructor(parameters, body, env) {
-    this.parameters = parameters
-    this.body = body
+    this.parameterList = parameters
+    this.funcBody = body
     this.env = env
   }
   get parameters() {
-    return this.parameters
+    return this.parameterList
   }
   get body() {
-    return this.body
+    return this.funcBody
   }
   makeEnv() {
-    return new NestedNev(this.env)
+    return new NestedEnv(this.env)
   }
   toString() {
     return `<func: ${hashcode(JSON.stringify(this.body))}>`
@@ -55,7 +55,7 @@ class Arguments extends ASTList {
       throw new Error('bad number of arguments')
     }
     let funcEnv = target.makeEnv()
-    let num
+    let num = 0
     for (let a of this) {
       parameters.eval(funcEnv, num++, a.eval(callerEnv))
     }
