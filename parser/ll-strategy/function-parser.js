@@ -1,7 +1,10 @@
 const { 
   Name,
+  NumberLiteral,
+  StringLiteral,
   Arguments,
   ParameterList,
+  PrimaryExpr,
   FuncStmnt,
 } = require('../../ast')
 
@@ -59,9 +62,13 @@ class FunctionParser extends OpPrecedenceParser {
   * postfix() {
     let args = []
     let token = yield* this.nextToken()
-    if (token.value === '(') {
+    if (token && token.value === '(') {
       let next
-      while((next = yield* this.param()) !== null) {
+      while((next = yield* this.nextIsToken(')')) === false) {
+        // 尚未到调用结尾
+        next = yield* this.expression()
+        // console.log('args to push')
+        // console.log(next)
         args.push(next)
         if ((yield* this.nextIsToken(',')) === false) {
           break
@@ -72,6 +79,55 @@ class FunctionParser extends OpPrecedenceParser {
       } else {
         throw new Error(`Parse Error: no matching for backet ${token.value} at line ${token.lineNo}`)
       }
+    } else {
+      this.queue.push(token)
+      return null
+    }
+  }
+  /* 
+  **  override method primary in OpPrecedenceParser
+  **  ( "(" expr ")" | NUMBER | IDENTIFIER | STRING ) { postfix }
+  */
+  * primary() {
+    let p // primary
+    let a = []// args
+
+    let token = yield* this.nextToken()
+    if (token.value === '(') {
+      // "(" expr ")"
+      let e = yield* this.expression()
+      
+      let anotherToken = yield* this.nextToken()
+      // console.log('anotherToken: ')
+      // console.log(anotherToken)
+      if (anotherToken.value === ')') {
+        // 括号能匹配 返回表达式
+        p = e
+      } else {
+        // 否则解析出错
+        throw  new Error(`Parse Error: no matching for backet ${token.value} at line ${token.lineNo}`)
+      } 
+    } else if (token.type === 'number') {
+      // NUMBER
+      p = new NumberLiteral(token)
+    } else if (token.type === 'identifier') {
+      // IDENTIFIER
+      p = new Name(token)
+    } else if (token.type === 'string') {
+      // STRING
+      p = new StringLiteral(token)
+    } else {
+      throw new Error(`Parse Error: bad factor at line ${token.lineNo}: ${token.value}`)
+    }
+
+    let postfix
+    while((postfix = yield* this.postfix()) !== null) {
+      a.push(postfix)
+    }
+    if (a.length) {
+      return new PrimaryExpr([p, ...a])
+    } else {
+      return p
     }
   }
 }

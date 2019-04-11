@@ -47,7 +47,6 @@ class OpPrecedenceParser {
     statements.push(s)
     // ; 分割的statement
     while (yield* this.nextIsToken(';')) {
-      
       s = yield* this.statement()
       statements.push(s)
     }
@@ -128,7 +127,6 @@ class OpPrecedenceParser {
       return p
     }
   }
-  
   // "(" expr ")" | NUMBER | IDENTIFIER | STRING
   * primary() {
     let token = yield* this.nextToken()
@@ -219,6 +217,9 @@ class OpPrecedenceParser {
     // eslint-disable-next-line
     console.log('=== parser end has been invoked ===')
     let result = this.run(null)
+    if (!result.value && result.done) {
+      throw new Error('Parse Error: early termination')
+    }
     // eslint-disable-next-line
     console.log('result of parser:')
     console.log(result.value.toString())
