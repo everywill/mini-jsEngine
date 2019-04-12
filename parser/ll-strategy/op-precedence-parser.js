@@ -52,7 +52,7 @@ class OpPrecedenceParser {
     }
     return statements
   }
-  // "if" expr block [ "else" block ] | "while" expr block | func |expression
+  // "if" expr block [ "else" block ] | "while" expr block | func | expression
   * statement() {
     if (yield* this.nextIsToken('if')) {
       let condition = yield* this.expression()
