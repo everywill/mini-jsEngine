@@ -1,5 +1,9 @@
-func test (a) {
-  a
+func fib (n) {
+  if n < 2 {
+    n
+  } else {
+    fib(n-1) + fib(n-2)
+  }
 };
 
-test (2+1)
+fib(10)

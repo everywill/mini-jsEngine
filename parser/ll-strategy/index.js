@@ -1,3 +1,3 @@
-const Parser = require('./function-parser')
+const Parser = require('./closure-parser')
 
 module.exports = new Parser()

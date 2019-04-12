@@ -113,6 +113,7 @@ class FuncStmnt extends ASTList {
 }
 
 module.exports = {
+  FunctionEntity,
   ParameterList, 
   Arguments,
   PrimaryExpr,
