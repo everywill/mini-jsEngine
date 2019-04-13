@@ -5,19 +5,23 @@ const IdReg = require('./token/identifier')
 const regexPat = `\\s*(?:(\/\/.*)|(${NumReg.source})|${StrReg.source}|(${IdReg.source}))?\\s*`
 
 const createToken = (matcher, lineNo) => {
+  let hasContent
   const token = {}
   // console.log(matcher)
   if (matcher[2] !== undefined) {
+    hasContent = true
     token.type = 'number'
     token.value = parseInt(matcher[2])
   } else if (matcher[3] !== undefined) {
+    hasContent = true
     token.type = 'string'
     token.value = matcher[3]
   } else if (matcher[4] !== undefined){
+    hasContent = true
     token.type = 'identifier'
     token.value = matcher[4]
   }
-  if (matcher[1] === undefined) {
+  if (matcher[1] === undefined && hasContent) {
     // not comment
     token.lineNo = lineNo
 
