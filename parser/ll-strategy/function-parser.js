@@ -25,7 +25,9 @@ class FunctionParser extends OpPrecedenceParser {
     }
 
     paramList = yield* this.paramlist()
+    // console.log(`paramlist: ${paramList.toString()}`)
     body = yield* this.block()
+    // console.log(`body: ${body.toString()}`)
 
     return new FuncStmnt([name, paramList, body])
   }
@@ -35,17 +37,17 @@ class FunctionParser extends OpPrecedenceParser {
     let token = yield* this.nextToken()
     if (token.value === '(') {
       let next
-      while((next = yield* this.param()) !== null) {
+      while(yield* this.checkNextToken(')', false)) {
+        // console.log('enter paramlist while')
+        next = yield* this.param()
+        // console.log(`push to paramlist: ${next.toString()}`)
         params.push(next)
-        if ((yield* this.nextIsToken(',')) === false) {
-          break
+        if (yield* this.checkNextToken(',')) {
+          continue
         }
       }
-      if (yield* this.nextIsToken(')')) {
-        return new ParameterList(params)
-      } else {
-        throw new Error(`Parse Error: no matching for backet ${token.value} at line ${token.lineNo}`)
-      }
+
+      return new ParameterList(params)
     }
   }
   // IDENTIFIER
@@ -64,21 +66,18 @@ class FunctionParser extends OpPrecedenceParser {
     let token = yield* this.nextToken()
     if (token && token.value === '(') {
       let next
-      while((next = yield* this.nextIsToken(')')) === false) {
+      while(yield* this.checkNextToken(')', false)) {
         // 尚未到调用结尾
         next = yield* this.expression()
         // console.log('args to push')
         // console.log(next)
         args.push(next)
-        if ((yield* this.nextIsToken(',')) === false) {
-          break
+        if (yield* this.checkNextToken(',')) {
+          continue
         }
       }
-      if (yield* this.nextIsToken(')')) {
-        return new Arguments(args)
-      } else {
-        throw new Error(`Parse Error: no matching for backet ${token.value} at line ${token.lineNo}`)
-      }
+
+      return new Arguments(args)
     } else {
       this.queue.push(token)
       return null
@@ -112,7 +111,11 @@ class FunctionParser extends OpPrecedenceParser {
       p = new NumberLiteral(token)
     } else if (token.type === 'identifier') {
       // IDENTIFIER
-      p = new Name(token)
+      if (this.reserved.indexOf(token.value) === -1) {
+        p = new Name(token)
+      } else {
+        throw new Error(`Parse Error: bad Name ${token.value} at line ${token.lineNo}`)
+      }
     } else if (token.type === 'string') {
       // STRING
       p = new StringLiteral(token)

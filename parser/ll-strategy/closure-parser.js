@@ -40,7 +40,11 @@ class ClosureParser extends FunctionParser {
       p = new NumberLiteral(token)
     } else if (token.type === 'identifier') {
       // IDENTIFIER
-      p = new Name(token)
+      if (this.reserved.indexOf(token.value) === -1) {
+        p = new Name(token)
+      } else {
+        throw new Error(`Parse Error: bad Name ${token.value} at line ${token.lineNo}`)
+      }
     } else if (token.type === 'string') {
       // STRING
       p = new StringLiteral(token)

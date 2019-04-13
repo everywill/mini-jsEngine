@@ -27,7 +27,7 @@ class OpPrecedenceParser {
       '^': { priority: 5, isLeftAssoc: false },
     }
 
-    this.reserved = ['if', 'else', 'while', 'func']
+    this.reserved = ['if', 'else', 'while', 'func', '(', ')', '{', '}']
 
     let program = this.programGenerator()
     program.next()
@@ -46,7 +46,7 @@ class OpPrecedenceParser {
     let s = yield* this.statement()
     statements.push(s)
     // ; 分割的statement
-    while (yield* this.nextIsToken(';')) {
+    while (yield* this.checkNextToken(';')) {
       s = yield* this.statement()
       statements.push(s)
     }
@@ -54,21 +54,21 @@ class OpPrecedenceParser {
   }
   // "if" expr block [ "else" block ] | "while" expr block | func | expression
   * statement() {
-    if (yield* this.nextIsToken('if')) {
+    if (yield* this.checkNextToken('if')) {
       let condition = yield* this.expression()
       let thenBlock = yield* this.block()
       
-      if (yield* this.nextIsToken('else')) {
+      if (yield* this.checkNextToken('else')) {
         let elseBlock = yield* this.block()
         return new IfStmnt([condition, thenBlock, elseBlock])
       } else {
         return new IfStmnt([condition, thenBlock])
       }
-    } else if (yield* this.nextIsToken('while')) {
+    } else if (yield* this.checkNextToken('while')) {
       let condition = yield* this.expression()
       let body = yield* this.block()
       return new WhileStmnt([condition, body])
-    } else if (yield* this.nextIsToken('func')) {
+    } else if (yield* this.checkNextToken('func')) {
       let f = yield* this.func()
       return f
     } else {
@@ -84,23 +84,20 @@ class OpPrecedenceParser {
     let token = yield* this.nextToken()
     if (token.value === '{') {
       // 代码块开始
-      let s = yield* this.statement()
-      statements.push(s)
-
-      while (yield* this.nextIsToken(';')) {
-        // ; 分割的statement 
+      let s
+      while(yield* this.checkNextToken('}', false)) {
+        // console.log('enter paramlist while')
         s = yield* this.statement()
         statements.push(s)
+        if (yield* this.checkNextToken(';')) {
+          continue
+        }
       }
 
-      if (yield* this.nextIsToken('}')) {
-        // 代码块结束
-        return new BlockStmnt(statements)
-      } else {
-        throw new Error(`Parse Error: no matching for backet ${token.value} at line ${token.lineNo}`)
-      }
+      // 代码块结束
+      return new BlockStmnt(statements)
     } else {
-      return null
+      throw new Error(`Parse Error: block missing { at ${token.lineNo}`)
     }
   }
 
@@ -149,7 +146,11 @@ class OpPrecedenceParser {
       return new NumberLiteral(token)
     } else if (token.type === 'identifier') {
       // IDENTIFIER
-      return new Name(token)
+      if (this.reserved.indexOf(token.value) === -1) {
+        return new Name(token)
+      } else {
+        throw new Error(`Parse Error: bad Name ${token.value} at line ${token.lineNo}`)
+      }
     } else if (token.type === 'string') {
       // STRING
       return new StringLiteral(token)
@@ -178,14 +179,19 @@ class OpPrecedenceParser {
     }
     return token
   }
-  * nextIsToken(name) {
+  * checkNextToken(name, condition = true) {
     let next = yield* this.nextToken()
+    let result
+    // console.log(`check ${next.value} === ${name}, condition: ${condition}`)
+
     if (next && next.value === name) {
-      return true
+      result = condition 
     } else {
       this.queue.push(next)
-      return false
+      result = !condition
     }
+    
+    return result
   }
   * doShift(left, op) {
     let right = yield* this.factor()

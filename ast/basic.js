@@ -38,6 +38,12 @@ class Name extends ASTLeaf {
   }
 }
 
+class NullStmnt extends ASTList {
+  constructor(tokenList) {
+    super(tokenList)
+  }
+}
+
 class BinaryExpr extends ASTList {
   constructor(tokenList) {
     super(tokenList)
@@ -204,6 +210,7 @@ module.exports = {
   StringLiteral,
   NumberLiteral,
   Name,
+  NullStmnt,
   BinaryExpr,
   NegativeExpr,
   BlockStmnt,

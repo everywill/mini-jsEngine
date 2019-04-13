@@ -18,5 +18,5 @@ SourceCode
   .pipe(new ReadlineTransform())
   .pipe(new Lexer())
   .pipe(new Parser())
-  // .pipe(new Evaluator())
-  .pipe(new LogPassthrough({objectMode: true}))
+  .pipe(new Evaluator())
+  // .pipe(new LogPassthrough({objectMode: true}))

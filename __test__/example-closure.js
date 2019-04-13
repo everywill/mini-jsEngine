@@ -1,5 +1,1 @@
-func counter (c) {
-  closure () {
-    c = c + 1
-  }
-}
+func counter () {}
