@@ -1,5 +1,6 @@
 const { ASTList } = require('./root-type')
 const { NestedEnv } = require('../evaluator/environment')
+const { NativeFunction } = require('./native-func')
 const hashcode = require('../utils/hashcode')
 
 class FunctionEntity {
@@ -45,21 +46,33 @@ class Arguments extends ASTList {
     return this.numChildren
   }
   eval(callerEnv, target) {
-    // 如果apply的不是一个函数
-    if (target instanceof FunctionEntity === false) {
-      throw new Error('bad function')
+    // 支持调用原生函数
+    if (target instanceof NativeFunction) {
+      // native函数
+      let args = []
+      for (let a of this) {
+        args.push(a.eval(callerEnv))
+      }
+      return target.invoke(args, this)
+    } else {
+      // 非native函数
+      if (target instanceof FunctionEntity === false) {
+        // 如果apply的不是一个函数
+        throw new Error('bad function')
+      }
+      let parameters = target.parameters
+      // 如果实参和形参数目不匹配
+      if (this.size !== parameters.size) {
+        throw new Error('bad number of arguments')
+      }
+      let funcEnv = target.makeEnv()
+      let num = 0
+      for (let a of this) {
+        parameters.eval(funcEnv, num++, a.eval(callerEnv))
+      }
+      return target.body.eval(funcEnv)
     }
-    let parameters = target.parameters
-    // 如果实参和形参数目不匹配
-    if (this.size !== parameters.size) {
-      throw new Error('bad number of arguments')
-    }
-    let funcEnv = target.makeEnv()
-    let num = 0
-    for (let a of this) {
-      parameters.eval(funcEnv, num++, a.eval(callerEnv))
-    }
-    return target.body.eval(funcEnv)
+      
   }
 }
 

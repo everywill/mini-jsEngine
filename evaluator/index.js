@@ -1,5 +1,9 @@
 const { Writable } = require('stream')
-const { BasicEnv, NestedEnv } = require('./environment')
+const { 
+  // BasicEnv, 
+  // NestedEnv,
+  EnvWithNatives,
+} = require('./environment')
 
 class Evaluator extends Writable {
   constructor(options) {
@@ -7,7 +11,7 @@ class Evaluator extends Writable {
       objectMode: true,
     }))
 
-    this.env = new NestedEnv()
+    this.env = new EnvWithNatives()
   }
   _write(chunk, encoding, callback) {
     this.astList = chunk

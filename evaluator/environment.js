@@ -1,3 +1,5 @@
+const { NativeFunction } = require('../ast/native-func')
+
 class BasicEnv {
   constructor() {
     this.values = {}
@@ -48,7 +50,22 @@ class NestedEnv extends BasicEnv {
   }
 }
 
+class EnvWithNatives extends NestedEnv {
+  constructor(env) {
+    super(env)
+    this.appendNatives(this)
+  }
+  appendNatives(env) {
+    // eslint-disable-next-line
+    this.append(env, 'log', console.log)
+  }
+  append(env, name, method) {
+    env.put(name, new NativeFunction(name, method))
+  }
+}
+
 module.exports = {
   BasicEnv,
   NestedEnv,
+  EnvWithNatives,
 }

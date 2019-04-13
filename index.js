@@ -11,7 +11,8 @@ const Evaluator = require('./evaluator')
 // const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-operator.js'))
 // const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-expression.js'))
 // const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-func.js'))
-const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-closure.js'))
+// const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-closure.js'))
+const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-native-func.js'))
 // const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example.js'))
 
 SourceCode
