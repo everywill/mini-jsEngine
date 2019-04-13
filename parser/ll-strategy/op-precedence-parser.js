@@ -69,11 +69,13 @@ class OpPrecedenceParser {
       let body = yield* this.block()
       return new WhileStmnt([condition, body])
     } else if (yield* this.checkNextToken('func')) {
-      let f = yield* this.func()
-      return f
+      // 增加函数解析
+      return yield* this.func()
+    } else if (yield* this.checkNextToken('class')) {
+      // 增加类解析
+      return yield* this.classDef()
     } else {
-      let e = yield* this.expression()
-      return e
+      return yield* this.expression()
     }
   }
 

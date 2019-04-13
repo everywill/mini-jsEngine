@@ -1,4 +1,3 @@
-// const { ASTList } = require('./root-type')
 // const { FunctionEntity } = require('./function')
 
 class NativeFunction {

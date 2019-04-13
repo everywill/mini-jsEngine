@@ -6,6 +6,4 @@ class NativeFuncParser extends ClosureParser {
   }
 }
 
-module.exports = {
-  NativeFuncParser,
-}
+module.exports = NativeFuncParser
