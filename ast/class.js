@@ -1,4 +1,11 @@
 const { ASTList } = require('./root-type')
+const { NestedEnv } = require('../evaluator/environment')
+
+class StoneObject {
+  constructor(env) {
+    this.env = env
+  }
+}
 
 class ClassInfo {
   constructor(classStmnt, env) {
@@ -34,7 +41,12 @@ class ClassBody extends ASTList {
   constructor(tokenList) {
     super(tokenList)
   }
-  eval(env) {}
+  eval(env) {
+    for (let cb of this) {
+      cb.eval(env)
+    }
+    return null
+  }
 }
 
 class ClassStmnt extends ASTList {
@@ -46,7 +58,7 @@ class ClassStmnt extends ASTList {
   }
   get superClass() {
     if (this.numChildren < 3) {
-      return null
+      return '*'
     }
     return this.child(1).name
   }
@@ -55,8 +67,7 @@ class ClassStmnt extends ASTList {
   }
   toString() {
     let parent = this.superClass
-    parent = parent || '*'
-
+    // parent = parent || '*'
     return `(class ${this.name} ${parent} ${this.body})`
   }
   eval(env) {
@@ -76,7 +87,25 @@ class Dot extends ASTList {
   toString() {
     return `.${this.name}`
   }
-  eval(env, target) {}
+  initObject(classInfo, env) {
+    if (classInfo.superClass) {
+      this.initObject(classInfo.superClass, env)
+    }
+    classInfo.body.eval(env)
+  }
+  eval(env, target) {
+    let member = this.name
+    if (target instanceof ClassInfo) {
+      if (member === 'new') {
+        let classInfo = target
+        let nestEnv = new NestedEnv(env)
+        let so = new StoneObject(nestEnv)
+        nestEnv.putNew('this', so)
+        this.initObject(classInfo, nestEnv)
+        return so
+      }
+    }
+  }
 }
 
 module.exports = {
