@@ -6,6 +6,7 @@ const {
   ParameterList,
   PrimaryExpr,
   FuncStmnt,
+  Dot,
 } = require('../../ast')
 
 const OpPrecedenceParser = require('./op-precedence-parser')
@@ -78,10 +79,18 @@ class FunctionParser extends OpPrecedenceParser {
       }
 
       return new Arguments(args)
+    } else if (token && token.value === '.') {
+      // 引入class之后的链式调用
+      let token = yield* this.nextToken()
+      if (token.type === 'identifier') {
+        return new Dot([Name(token)])
+      } else {
+        throw new Error(`Parse Error: bad member name ${token.value} at line ${token.lineNo}`)
+      }
     } else {
       this.queue.push(token)
       return null
-    }
+    } 
   }
   /* 
   **  override method primary in OpPrecedenceParser

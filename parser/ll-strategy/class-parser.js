@@ -33,12 +33,27 @@ class ClassParser extends NativeFuncParser {
   }
   * classDef() {
     let name
+    let superClass
+    let classBody
     let token = yield* this.nextToken()
     if (token.type === 'identifier') {
       name = new Name(token)
     } else {
       throw new Error(`Parse Error: bad class name ${token.value} at line ${token.lineNo}`)
     }
+    if (yield* this.checkNextToken('extends')) {
+      let token = yield* this.nextToken()
+      if (token.type === 'identifier') {
+        superClass = new Name(token)
+      } else {
+        throw new Error(`Parse Error: bad superclass name ${token.value} at line ${token.lineNo}`)
+      }
+    }
+    classBody = yield* this.classBody()
+    if (superClass) {
+      return new ClassStmnt([name, superClass, classBody])
+    }
+    return new ClassStmnt([name, classBody])
   }
 }
 
