@@ -83,7 +83,7 @@ class FunctionParser extends OpPrecedenceParser {
       // 引入class之后的链式调用
       let token = yield* this.nextToken()
       if (token.type === 'identifier') {
-        return new Dot([Name(token)])
+        return new Dot([new Name(token)])
       } else {
         throw new Error(`Parse Error: bad member name ${token.value} at line ${token.lineNo}`)
       }

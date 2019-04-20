@@ -72,7 +72,6 @@ class Arguments extends ASTList {
       }
       return target.body.eval(funcEnv)
     }
-      
   }
 }
 
