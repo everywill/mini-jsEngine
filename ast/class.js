@@ -105,8 +105,10 @@ class Dot extends ASTList {
   }
   initObject(classInfo, env) {
     if (classInfo.superClass) {
+      // 父类继承
       this.initObject(classInfo.superClass, env)
     }
+    // 子类覆盖
     classInfo.body.eval(env)
   }
   eval(env, target) {
@@ -128,6 +130,7 @@ class Dot extends ASTList {
 }
 
 module.exports = {
+  StoneObject,
   ClassBody,
   ClassStmnt,
   Dot,

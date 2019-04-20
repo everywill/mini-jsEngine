@@ -1,4 +1,6 @@
 const { ASTLeaf, ASTList } = require('./root-type')
+const { PrimaryExpr } = require('./function')
+const { StoneObject, Dot } = require('./class')
 
 class StringLiteral extends ASTLeaf {
   constructor(token) {
@@ -75,6 +77,17 @@ class BinaryExpr extends ASTList {
     if (left instanceof Name) {
       env.put(left.name, rvalue)
       return rvalue
+    } else if (left instanceof PrimaryExpr) {
+      // 引入class后对赋值部分修改
+      if (left.hasPostfix(0) && left.postfix(0) instanceof Dot) {
+        let target = left.evalSubExpr(env, 1)
+        if (target instanceof StoneObject) {
+          let name = left.postfix(0).name
+          target.write(name, rvalue)
+          
+          return rvalue
+        }
+      }
     } else {
       throw 'invalid assignment'
     }

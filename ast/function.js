@@ -87,7 +87,7 @@ class PrimaryExpr extends ASTList {
     return this.child(this.numChildren - nestHierarchy - 1)
   }
   hasPostfix(nestHierarchy) {
-    return this.numChildren - nestHierarchy - 1
+    return this.numChildren - nestHierarchy - 1 > 0
   }
   evalSubExpr(env, nestHierarchy) {
     if (this.hasPostfix(nestHierarchy)) {
