@@ -13,7 +13,8 @@ const Evaluator = require('./evaluator')
 // const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-func.js'))
 // const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-closure.js'))
 // const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-native-func.js'))
-const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-class.js'))
+// const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-class.js'))
+const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-array.js'))
 // const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example.js'))
 
 SourceCode

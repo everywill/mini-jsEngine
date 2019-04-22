@@ -1,6 +1,7 @@
 const { ASTLeaf, ASTList } = require('./root-type')
 const { PrimaryExpr } = require('./function')
 const { StoneObject, Dot } = require('./class')
+const { ArrayRef } = require('./array')
 
 class StringLiteral extends ASTLeaf {
   constructor(token) {
@@ -78,7 +79,7 @@ class BinaryExpr extends ASTList {
       env.put(left.name, rvalue)
       return rvalue
     } else if (left instanceof PrimaryExpr) {
-      // 引入class后对赋值部分修改
+      // 引入class后增加对对象属性赋值功能
       if (left.hasPostfix(0) && left.postfix(0) instanceof Dot) {
         let target = left.evalSubExpr(env, 1)
         if (target instanceof StoneObject) {
@@ -87,6 +88,16 @@ class BinaryExpr extends ASTList {
           
           return rvalue
         }
+      // 引入数组后增加对数组元素赋值功能
+      } else if (left.hasPostfix(0) && left.postfix(0) instanceof ArrayRef) {
+        let target = left.evalSubExpr(env, 1)
+        if (Array.isArray(target)) {
+          let index = left.postfix(0).eval(env)
+          if (typeof index === 'number' && Math.floor(index) === index) {
+            target[index] = rvalue
+          }
+        }
+        throw new Error('bad array access')
       }
     } else {
       throw 'invalid assignment'
