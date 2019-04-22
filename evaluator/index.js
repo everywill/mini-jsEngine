@@ -21,7 +21,7 @@ class Evaluator extends Writable {
     let r
     this.astList.map((ast) => {
       r = ast.eval(this.env)
-      console.log(`result: ${r}`)
+      console.log(`eval result: ${r}`)
     })
   
     callback()

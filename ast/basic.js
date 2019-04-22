@@ -92,12 +92,13 @@ class BinaryExpr extends ASTList {
       } else if (left.hasPostfix(0) && left.postfix(0) instanceof ArrayRef) {
         let target = left.evalSubExpr(env, 1)
         if (Array.isArray(target)) {
-          let index = left.postfix(0).eval(env)
+          let index = left.postfix(0).index.eval(env, target)
           if (typeof index === 'number' && Math.floor(index) === index) {
             target[index] = rvalue
+            return rvalue
           }
+          throw new Error(`bad array index: ${index}`)
         }
-        throw new Error('bad array access')
       }
     } else {
       throw 'invalid assignment'

@@ -9,7 +9,7 @@ class ArrayLiteral extends ASTList {
   }
   eval(env) {
     let res = []
-    let i 
+    let i = 0
     for (let element of this) {
       res[i++] = element.eval(env)
     }
@@ -30,11 +30,12 @@ class ArrayRef extends ASTList {
   eval(env, target) {
     if (Array.isArray(target)) {
       let index = this.index.eval(env)
+
       if (typeof index === 'number' && Math.floor(index) === index) {
         // 确认为整数类型
-        return index
+        return target[index]
       }
-      throw new Error('bad array index')
+      throw new Error(`bad array index: ${index}`)
     }
   }
 }
