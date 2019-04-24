@@ -1,11 +1,11 @@
 const fs = require('fs')
 const path = require('path')
 
-const ReadlineTransform = require('./utils/readline-transform')
-const LogPassthrough = require('./utils/log-passthrough')
-const Lexer = require('./lexer')
-const Parser = require('./parser')
-const Evaluator = require('./evaluator')
+const ReadlineTransform = require('./src/utils/readline-transform')
+const LogPassthrough = require('./src/utils/log-passthrough')
+const Lexer = require('./src/lexer')
+const Parser = require('./src/parser')
+const Evaluator = require('./src/evaluator')
 
 // const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-factor.js'))
 // const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-operator.js'))
