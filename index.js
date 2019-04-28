@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const performance = require('perf_hooks')
 
 const ReadlineTransform = require('./src/utils/readline-transform')
 const LogPassthrough = require('./src/utils/log-passthrough')
