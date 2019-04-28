@@ -9,3 +9,5 @@
 * [对类的支持](./docs/CLASS.md)
 * [对数组的支持](./docs/ARRAY.md)
 
+## 性能优化
+
