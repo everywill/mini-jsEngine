@@ -1,4 +1,5 @@
 const { NativeFunction } = require('../ast/native-func')
+const { Symbols } = require('../optimizer/symbols')
 
 class BasicEnv {
   constructor() {
@@ -101,8 +102,11 @@ class ArrayEnv extends EnvWithNatives {
   }
 }
 
-class ArrayEnvWithNames extends ArrayEnv {
-  constructor(env) {}
+class ArraySymbolEnv extends ArrayEnv {
+  constructor(env) {
+    super(env)
+    this.symbols = new Symbols()
+  }
 }
 
 module.exports = {
@@ -110,5 +114,5 @@ module.exports = {
   NestedEnv,
   EnvWithNatives,
   ArrayEnv,
-  ArrayEnvWithNames,
+  ArraySymbolEnv,
 }
