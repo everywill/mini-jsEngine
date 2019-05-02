@@ -12,7 +12,8 @@ const envs = {
   func: NestedEnv,
   closure: NestedEnv,
   nativeFunc: NativeFuncEnv,
-  classDef: NativeFuncEnv || NestedEnv
+  classDef: NativeFuncEnv || NestedEnv,
+  array: NativeFuncEnv || NestedEnv,
 }
 
 class Evaluator extends Writable {

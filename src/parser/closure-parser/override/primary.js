@@ -7,7 +7,7 @@ const { PrimaryExpr } = require('../../function-parser/ast')
 const { Closure } = require('../ast')
 const mixin = require('../../../utils/decorator-mixin')
 
-const overrideStatement = mixin({
+const overridePrimary = mixin({
   /* 
   **  " fun " paramlist block | ( "(" expr ")" | NUMBER | IDENTIFIER | STRING ) { postfix }
   */
@@ -63,4 +63,4 @@ const overrideStatement = mixin({
   }
 })
 
-module.exports = overrideStatement
+module.exports = overridePrimary

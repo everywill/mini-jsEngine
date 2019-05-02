@@ -8,7 +8,7 @@ const Lexer = require('./lib/lexer')
 const Parser = require('./lib/parser')
 const Evaluator = require('./lib/evaluator')
 
-let type = 'classDef'
+let type = 'array'
 
 const lexer = new Lexer()
 const parser = new Parser({parser: type})
@@ -20,8 +20,8 @@ const evaluator = new Evaluator({evaluator: type})
 // const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-func.js'))
 // const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-closure.js'))
 // const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-native-func.js'))
-const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-class.js'))
-// const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-array.js'))
+// const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-class.js'))
+const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-array.js'))
 // const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example.js'))
 
 SourceCode

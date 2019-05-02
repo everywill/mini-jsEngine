@@ -3,20 +3,36 @@ const {
   NumberLiteral,
   Name,
 } = require('../../basic-parser/ast')
-const { PrimaryExpr } = require('../ast')
+const { PrimaryExpr } = require('../../function-parser/ast')
+const { Closure } = require('../../closure-parser/ast')
+const { ArrayLiteral } = require('../ast')
 const mixin = require('../../../utils/decorator-mixin')
 
 const overridePrimary = mixin({
   /* 
-  **  override method primary in OpPrecedenceParser
-  **  ( "(" expr ")" | NUMBER | IDENTIFIER | STRING ) { postfix }
+  **  ("[" [ elements ] "]" | " closure " paramlist block | "(" expr ")" | NUMBER | IDENTIFIER | STRING ) { postfix }
   */
   * primary() {
     let p // primary
     let a = []// args
 
     let token = yield* this.nextToken()
-    if (token.value === '(') {
+    if (token.value === '[') {
+      // 数组
+      let elements = yield* this.elements()
+      let anotherToken = yield* this.nextToken()
+      if (anotherToken.value === ']') {
+        // 括号能匹配 返回表达式
+        p = new ArrayLiteral(elements)
+      } else {
+        // 否则解析出错
+        throw  new Error(`Parse Error: no matching for backet ${token.value} at line ${token.lineNo}`)
+      } 
+    } else if (token.value === 'closure') {
+      let paramList = yield* this.paramlist()
+      let body = yield* this.block()
+      p = new Closure([paramList, body])
+    } else if (token.value === '(') {
       // "(" expr ")"
       let e = yield* this.expression()
       

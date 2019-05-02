@@ -3,6 +3,7 @@ const basicParser = require('./basic-parser')
 const functionParser = require('./function-parser')
 const closureParser = require('./closure-parser')
 const ClassParser = require('./class-parser')
+const ArrayParser = require('./array-parser')
 
 const parsers = {
   basic: basicParser,
@@ -10,6 +11,7 @@ const parsers = {
   closure: closureParser,
   nativeFunc: closureParser || functionParser,
   classDef: ClassParser,
+  array: ArrayParser,
 }
 
 class Parser extends Transform {

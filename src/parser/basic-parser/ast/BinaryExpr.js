@@ -1,8 +1,9 @@
 const ASTList = require('../../ast-root/ASTList')
 let BasicBinaryExprEval = require('../../../evaluator/basic-evaluator/ast-eval/BinaryExpr')
 let BinaryExprEvalEnableClass = require('../../../evaluator/class-evaluator/ast-eval/BinaryExpr')
+let BinaryExprEvalEnableArray = require('../../../evaluator/array-evaluator/ast-eval/BinaryExpr')
 
-let BinaryExprEval = BinaryExprEvalEnableClass || BasicBinaryExprEval
+let BinaryExprEval = BinaryExprEvalEnableArray || BinaryExprEvalEnableClass || BasicBinaryExprEval
 
 @BinaryExprEval
 class BinaryExpr extends ASTList {
