@@ -3,8 +3,8 @@ const {
   BasicEnv,
   NestedEnv,
   NativeFuncEnv,
-  ArrayEnv,
-  ArraySymbolEnv,
+  // ArrayEnv,
+  // ArraySymbolEnv,
 } = require('./environment')
 
 const envs = {
@@ -12,6 +12,7 @@ const envs = {
   func: NestedEnv,
   closure: NestedEnv,
   nativeFunc: NativeFuncEnv,
+  classDef: NativeFuncEnv || NestedEnv
 }
 
 class Evaluator extends Writable {
