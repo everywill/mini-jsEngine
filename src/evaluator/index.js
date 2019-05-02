@@ -1,17 +1,27 @@
 const { Writable } = require('stream')
 const { 
-  // BasicEnv, 
-  // NestedEnv,
-  EnvWithNatives,
+  BasicEnv,
+  NestedEnv,
+  NativeFuncEnv,
+  ArrayEnv,
+  ArraySymbolEnv,
 } = require('./environment')
+
+const envs = {
+  basic: BasicEnv,
+  func: NestedEnv,
+  closure: NestedEnv,
+  nativeFunc: NativeFuncEnv,
+}
 
 class Evaluator extends Writable {
   constructor(options) {
-    super(Object.assign({}, options, {
+    const { evaluator: evaluatorName, ...rest } = options
+    super(Object.assign({}, rest, {
       objectMode: true,
     }))
 
-    this.env = new EnvWithNatives()
+    this.env = new envs[evaluatorName]()
   }
   _write(chunk, encoding, callback) {
     this.astList = chunk
@@ -21,6 +31,7 @@ class Evaluator extends Writable {
     let r
     this.astList.map((ast) => {
       r = ast.eval(this.env)
+      // eslint-disable-next-line
       console.log(`eval result: ${r}`)
     })
   

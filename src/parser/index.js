@@ -7,6 +7,7 @@ const parsers = {
   basic: basicParser,
   func: functionParser,
   closure: closureParser,
+  nativeFunc: closureParser || functionParser,
 }
 
 class Parser extends Transform {

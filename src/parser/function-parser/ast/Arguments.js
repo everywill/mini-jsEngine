@@ -1,5 +1,6 @@
 const ASTList = require('../../ast-root/ASTList')
-const ArgumentsEval = require('../../../evaluator/function-evaluator/ast-eval/Arguments')
+// const ArgumentsEval = require('../../../evaluator/function-evaluator/ast-eval/Arguments')
+const ArgumentsEval = require('../../../evaluator/native-evaluator/ast-eval/Arguments')
 
 @ArgumentsEval
 class Arguments extends ASTList {

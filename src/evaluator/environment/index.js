@@ -1,7 +1,13 @@
 const BasicEnv = require('./BasicEnv')
-const NestEnv = require('./NestEnv')
+const NestedEnv = require('./NestedEnv')
+const NativeFuncEnv = require('./NativeFuncEnv')
+const ArrayEnv = require('./ArrayEnv')
+const ArraySymbolEnv = require('./ArraySymbolEnv')
 
 module.exports = {
   BasicEnv,
-  NestEnv,
+  NestedEnv,
+  NativeFuncEnv,
+  ArrayEnv,
+  ArraySymbolEnv,
 }
