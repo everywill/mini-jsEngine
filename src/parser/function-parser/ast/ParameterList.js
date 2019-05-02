@@ -1,5 +1,7 @@
-const ASTList = require('../../ast/ASTList')
+const ASTList = require('../../ast-root/ASTList')
+const ParameterListEval = require('../../../evaluator/function-evaluator/ast-eval/ParameterList')
 
+@ParameterListEval
 class ParameterList extends ASTList {
   constructor(tokenList) {
     super(tokenList)
@@ -9,9 +11,6 @@ class ParameterList extends ASTList {
   }
   name(i) {
     return this.child(i).name
-  }
-  eval(env, index, value) {
-    env.putNew(this.name(index), value)
   }
 }
 
