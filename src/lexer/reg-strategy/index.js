@@ -40,7 +40,7 @@ const run = (lineData) => {
   while (pos < endPos) {
     const matcher = Regexp.exec(content)
     let newPos = Regexp.lastIndex
-    console.log(`Regexp.lastIndex: ${newPos}`)
+    // console.log(`Regexp.lastIndex: ${newPos}`)
     if (newPos === pos) {
       throw new Error('can not match any token')
     }

@@ -1,5 +1,4 @@
 const { Transform } = require('stream')
-const arrayEnvStrategy = require('./array-env')
 
 class Parser extends Transform {
   constructor(options) {

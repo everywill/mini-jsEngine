@@ -1,13 +1,18 @@
 const { Transform } = require('stream')
-const llStrategy = require('./ll-strategy')
+const basicParser = require('./basic-parser')
+
+const parsers = {
+  basic: basicParser,
+}
 
 class Parser extends Transform {
   constructor(options) {
-    super(Object.assign({}, options, {
+    const { parser: parserName, ...rest } = options
+    super(Object.assign({}, rest, {
       objectMode: true,
     }))
 
-    this.parserStrategy = llStrategy
+    this.parserStrategy = new parsers[parserName]()
   }
 
   _transform(chunk, encoding, callback) {
