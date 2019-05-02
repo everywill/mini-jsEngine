@@ -4,12 +4,11 @@ const {
   FuncStmnt,
   Arguments,
 } = require('./ast')
+const BasicParser = require('../basic-parser')
 const { 
   overrideStatement,
   overridePrimary, 
 } = require('./override')
-
-const BasicParser = require('../basic-parser')
 
 // ( "(" expr ")" | NUMBER | IDENTIFIER | STRING ) { postfix }
 @overridePrimary

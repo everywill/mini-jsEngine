@@ -1,10 +1,12 @@
 const { Transform } = require('stream')
 const basicParser = require('./basic-parser')
 const functionParser = require('./function-parser')
+const closureParser = require('./closure-parser')
 
 const parsers = {
   basic: basicParser,
   func: functionParser,
+  closure: closureParser,
 }
 
 class Parser extends Transform {

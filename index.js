@@ -9,7 +9,7 @@ const Parser = require('./lib/parser')
 const Evaluator = require('./lib/evaluator')
 
 const lexer = new Lexer()
-const parser = new Parser({parser: 'func'})
+const parser = new Parser({parser: 'closure'})
 const evaluator = new Evaluator()
 
 // const SourceCode = fs.createReadStream(path.join(__dirname, '__test__/example-factor.js'))
