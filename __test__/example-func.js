@@ -6,4 +6,7 @@ func fib (n) {
   }
 };
 
-fib(10)
+start = nowTime();
+fib(33);
+end = nowTime();
+log(end - start)

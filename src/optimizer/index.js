@@ -1,15 +1,35 @@
 const { Transform } = require('stream')
-const Symbols = require('./Symbols')
+const { 
+  BasicEnv,
+  NestedEnv,
+  ArraySymbolEnv,
+  nativeFuncWrap,
+} = require('../evaluator/environment')
+
+const envs = {
+  basic: BasicEnv,
+  func: NestedEnv,
+  closure: NestedEnv,
+  nativeFunc: NestedEnv,
+  classDef: NestedEnv,
+  array: NestedEnv,
+  optClosure: ArraySymbolEnv,
+}
 
 class Optimizer extends Transform {
   constructor(options) {
-    super(Object.assign({}, options, {
+    const { optimizer: optimizerName, ...rest } = options
+    super(Object.assign({}, rest, {
       objectMode: true,
     }))
-    this.symbols = new Symbols()
+    let envClazz = nativeFuncWrap(envs[optimizerName])
+    let env = new envClazz()
+    env.appendNatives()
+    this.symbols = env.names
   }
   _transform(chunk, encoding, callback) {
-    this.astList = chunk
+    const {astList} = chunk
+    this.astList = astList
     callback()
   }
   _final(callback) {
@@ -20,7 +40,9 @@ class Optimizer extends Transform {
       // console.log(`eval result: ${r}`)
     })
     // console.log(this.astList)
-    this.push(this.astList)
+    this.push({
+      astList: this.astList,
+    })
     callback()
   }
 }

@@ -7,7 +7,7 @@ const NameLookup = mixin({
       this.nestHierarchy = location.nestHierarchy
       this.index = location.index
     } else {
-      throw new Error(`undefined name: ${this.name}`)
+      this.index = -1
     }
   },
   lookupForAssign(symbols) {

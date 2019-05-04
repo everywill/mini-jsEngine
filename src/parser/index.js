@@ -38,7 +38,7 @@ class Parser extends Transform {
   _final(callback) {
     // console.log('Writable final')
     const result = this.parserStrategy.end()
-    this.push(result)
+    this.push({astList: result})
     callback()
   }
 }

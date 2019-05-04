@@ -5,6 +5,9 @@ class Symbols {
     this.outer = symbols
     this.nameTable = []
   }
+  get size() {
+    return this.nameTable.length
+  }
   find(name) {
     return this.nameTable.indexOf(name)
   }

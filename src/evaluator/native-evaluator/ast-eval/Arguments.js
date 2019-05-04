@@ -4,6 +4,7 @@ const NativeFunction = require('../NativeFunction')
 
 const ArgumentsEval = mixin({
   eval(callerEnv, target) {
+    // console.log(target)
     // 支持调用原生函数
     if (target instanceof NativeFunction) {
       // native函数

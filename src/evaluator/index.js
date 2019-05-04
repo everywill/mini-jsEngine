@@ -2,18 +2,17 @@ const { Writable } = require('stream')
 const { 
   BasicEnv,
   NestedEnv,
-  NativeFuncEnv,
-  // ArrayEnv,
   ArraySymbolEnv,
+  nativeFuncWrap,
 } = require('./environment')
 
 const envs = {
   basic: BasicEnv,
   func: NestedEnv,
   closure: NestedEnv,
-  nativeFunc: NativeFuncEnv,
-  classDef: NativeFuncEnv || NestedEnv,
-  array: NativeFuncEnv || NestedEnv,
+  nativeFunc: NestedEnv,
+  classDef: NestedEnv,
+  array: NestedEnv,
   optClosure: ArraySymbolEnv,
 }
 
@@ -24,10 +23,14 @@ class Evaluator extends Writable {
       objectMode: true,
     }))
 
-    this.env = new envs[evaluatorName]()
+    let envClazz = nativeFuncWrap(envs[evaluatorName])
+
+    this.env = new envClazz()
+    this.env.appendNatives()
   }
   _write(chunk, encoding, callback) {
-    this.astList = chunk
+    const {astList} = chunk
+    this.astList = astList
     callback()
   }
   _final(callback) {
