@@ -1,4 +1,4 @@
-const mixin = require('../../utils/decorator-mixin')
+const mixin = require('../../../utils/decorator-mixin')
 
 const BinaryExprLookup = mixin({
   lookup(symbols) {

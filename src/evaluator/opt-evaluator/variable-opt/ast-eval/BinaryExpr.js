@@ -1,5 +1,5 @@
-const mixin = require('../../../utils/decorator-mixin')
-const Name = require('../../../parser/basic-parser/ast/Name')
+const mixin = require('../../../../utils/decorator-mixin')
+const Name = require('../../../../parser/basic-parser/ast/Name')
 
 const BinaryExprEval = mixin({
   computeAssign(env, rvalue) {

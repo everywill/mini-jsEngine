@@ -1,4 +1,4 @@
-const mixin = require('../../utils/decorator-mixin')
+const mixin = require('../../../utils/decorator-mixin')
 
 const ParameterListLookup = mixin({
   lookup(symbols) {

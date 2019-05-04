@@ -1,5 +1,5 @@
-const mixin = require('../../../utils/decorator-mixin')
-const OptFunction = require('../OptFunction')
+const mixin = require('../../../../utils/decorator-mixin')
+const OptFunction = require('../../OptFunction')
 
 const ClosureEval = mixin({
   eval(env) {

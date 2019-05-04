@@ -1,7 +1,7 @@
 const ASTList = require('../../ast-root/ASTList')
 const ParameterListEval = require('../../../evaluator/function-evaluator/ast-eval/ParameterList')
-const OptParameterListEval = require('../../../evaluator/opt-evaluator/ast-eval/ParameterList')
-const ParameterListLookup = require('../../../optimizer/ast-lookup/ParameterList')
+const OptParameterListEval = require('../../../evaluator/opt-evaluator/variable-opt/ast-eval/ParameterList')
+const ParameterListLookup = require('../../../optimizer/variable-opt/ast-lookup/ParameterList')
 
 @ParameterListLookup
 @OptParameterListEval

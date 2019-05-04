@@ -1,7 +1,7 @@
 const ASTList = require('../../ast-root/ASTList')
 const ClosureEval = require('../../../evaluator/closure-evaluator/ast-eval/Closure')
-const OptClosureEval = require('../../../evaluator/opt-evaluator/ast-eval/Closure')
-const ClosureLookup = require('../../../optimizer/ast-lookup/Closure')
+const OptClosureEval = require('../../../evaluator/opt-evaluator/variable-opt/ast-eval/Closure')
+const ClosureLookup = require('../../../optimizer/variable-opt/ast-lookup/Closure')
 
 @ClosureLookup
 @OptClosureEval

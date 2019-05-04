@@ -1,5 +1,5 @@
-const mixin = require('../../utils/decorator-mixin')
-const Symbols = require('../Symbols')
+const mixin = require('../../../utils/decorator-mixin')
+const Symbols = require('../../Symbols')
 
 const FuncStmntLookup = mixin({
   lookup(symbols) {
