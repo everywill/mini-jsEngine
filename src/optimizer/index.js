@@ -1,27 +1,28 @@
 const { Transform } = require('stream')
+const Symbols = require('./Symbols')
 
-class Parser extends Transform {
+class Optimizer extends Transform {
   constructor(options) {
     super(Object.assign({}, options, {
       objectMode: true,
     }))
-
-    this.optimizeStrategy = arrayEnvStrategy
+    this.symbols = new Symbols()
   }
-
   _transform(chunk, encoding, callback) {
-    const astList = chunk
-    // console.log('Writable write')
-    // console.log(words)
-    const optimalAST = astList.map((AST) => {
-      this.parserStrategy.run(AST)
-    })
-    callback(optimalAST)
+    this.astList = chunk
+    callback()
   }
-
   _final(callback) {
+    this.astList.map((ast) => {
+      // console.log(ast)
+      ast.lookup(this.symbols)
+      // eslint-disable-next-line
+      // console.log(`eval result: ${r}`)
+    })
+    // console.log(this.astList)
+    this.push(this.astList)
     callback()
   }
 }
 
-module.exports = Parser
+module.exports = Optimizer

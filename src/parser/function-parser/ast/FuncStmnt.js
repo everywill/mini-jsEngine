@@ -1,6 +1,10 @@
 const ASTList = require('../../ast-root/ASTList')
 const FuncStmntEval = require('../../../evaluator/function-evaluator/ast-eval/FuncStmnt')
+const OptFuncStmntEval = require('../../../evaluator/opt-evaluator/ast-eval/FuncStmnt')
+const FuncStmntLookup = require('../../../optimizer/ast-lookup/FuncStmnt')
 
+@FuncStmntLookup
+@OptFuncStmntEval
 @FuncStmntEval
 class FuncStmnt extends ASTList {
   constructor(tokenList) {

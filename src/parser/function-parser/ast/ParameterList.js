@@ -1,6 +1,10 @@
 const ASTList = require('../../ast-root/ASTList')
 const ParameterListEval = require('../../../evaluator/function-evaluator/ast-eval/ParameterList')
+const OptParameterListEval = require('../../../evaluator/opt-evaluator/ast-eval/ParameterList')
+const ParameterListLookup = require('../../../optimizer/ast-lookup/ParameterList')
 
+@ParameterListLookup
+@OptParameterListEval
 @ParameterListEval
 class ParameterList extends ASTList {
   constructor(tokenList) {

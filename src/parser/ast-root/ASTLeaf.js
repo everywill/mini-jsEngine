@@ -1,3 +1,6 @@
+let ASTLeafLookup = require('../../optimizer/ast-lookup/ASTLeaf')
+
+@ASTLeafLookup
 class ASTLeaf {
   constructor(token) {
     this.token = token

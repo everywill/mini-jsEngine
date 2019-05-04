@@ -1,3 +1,6 @@
+let ASTListLookup = require('../../optimizer/ast-lookup/ASTList')
+
+@ASTListLookup
 class ASTList {
   constructor(tokenList) {
     this.children = tokenList

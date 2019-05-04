@@ -1,6 +1,10 @@
 const ASTLeaf = require('../../ast-root/ASTLeaf')
 const NameEval = require('../../../evaluator/basic-evaluator/ast-eval/Name')
+const OptNameEval = require('../../../evaluator/opt-evaluator/ast-eval/Name')
+const NameLookup = require('../../../optimizer/ast-lookup/Name')
 
+@NameLookup
+@OptNameEval
 @NameEval
 class Name extends ASTLeaf {
   constructor(token) {

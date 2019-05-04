@@ -1,6 +1,10 @@
 const ASTList = require('../../ast-root/ASTList')
 const ClosureEval = require('../../../evaluator/closure-evaluator/ast-eval/Closure')
+const OptClosureEval = require('../../../evaluator/opt-evaluator/ast-eval/Closure')
+const ClosureLookup = require('../../../optimizer/ast-lookup/Closure')
 
+@ClosureLookup
+@OptClosureEval
 @ClosureEval
 class Closure extends ASTList {
   constructor(tokenList) {

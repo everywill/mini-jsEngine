@@ -12,6 +12,7 @@ const parsers = {
   nativeFunc: closureParser || functionParser,
   classDef: ClassParser,
   array: ArrayParser,
+  optClosure: closureParser,
 }
 
 class Parser extends Transform {

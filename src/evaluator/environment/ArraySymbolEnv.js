@@ -1,5 +1,5 @@
 const ArrayEnv = require('./ArrayEnv')
-const { Symbols } = require('../../optimizer/symbols')
+const Symbols = require('../../optimizer/Symbols')
 
 class ArraySymbolEnv extends ArrayEnv {
   constructor(env) {

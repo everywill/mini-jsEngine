@@ -4,7 +4,7 @@ const {
   NestedEnv,
   NativeFuncEnv,
   // ArrayEnv,
-  // ArraySymbolEnv,
+  ArraySymbolEnv,
 } = require('./environment')
 
 const envs = {
@@ -14,6 +14,7 @@ const envs = {
   nativeFunc: NativeFuncEnv,
   classDef: NativeFuncEnv || NestedEnv,
   array: NativeFuncEnv || NestedEnv,
+  optClosure: ArraySymbolEnv,
 }
 
 class Evaluator extends Writable {
@@ -32,6 +33,7 @@ class Evaluator extends Writable {
   _final(callback) {
     let r
     this.astList.map((ast) => {
+      // console.log(ast)
       r = ast.eval(this.env)
       // eslint-disable-next-line
       console.log(`eval result: ${r}`)

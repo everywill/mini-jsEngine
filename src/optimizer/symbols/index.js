@@ -1,9 +1,4 @@
-class Location {
-  constructor(nestHierarchy, index) {
-    this.nestHierarchy = nestHierarchy
-    this.index = index
-  }
-}
+const Location = require('../Location')
 
 class Symbols {
   constructor(symbols) {
@@ -44,6 +39,4 @@ class Symbols {
   }
 }
 
-module.exports = { 
-  Symbols, 
-}
+module.exports = Symbols
