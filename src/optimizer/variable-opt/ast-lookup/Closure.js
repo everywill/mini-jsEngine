@@ -1,5 +1,5 @@
 const mixin = require('../../../utils/decorator-mixin')
-const Symbols = require('../../Symbols')
+const { Symbols } = require('../../Symbols')
 
 const ClosureLookup = mixin({
   lookup(symbols) {
