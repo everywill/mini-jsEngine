@@ -1,7 +1,7 @@
 const mixin = require('../../../utils/decorator-mixin')
 
-const ClassBodyLookup = mixin({
+const FuncStmntLookup = mixin({
   lookup(symbols) {}
 })
 
-module.exports = ClassBodyLookup
+module.exports = FuncStmntLookup

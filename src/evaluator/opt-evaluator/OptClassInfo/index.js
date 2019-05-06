@@ -8,6 +8,13 @@ class OptClassInfo extends ClassInfo {
     this.fieldsSyms = fieldsSyms
     this.methodDefs = []
   }
+  copyTo(fieldsSyms, methodsSyms, methodDefs) {
+    fieldsSyms.append(this.fieldsSyms)
+    methodsSyms.append(this.methodsSyms)
+    for (let methodDef of this.methodDefs) {
+      methodDefs.push(methodDef)
+    }
+  }
   fieldIndex(name) {
     return this.fieldsSyms.find(name)
   }

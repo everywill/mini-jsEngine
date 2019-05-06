@@ -40,6 +40,9 @@ class Symbols {
     } 
     return index
   }
+  append(symbols) {
+    this.nameTable = this.nameTable.concat(symbols.nameTable)
+  }
 }
 
 module.exports = Symbols
