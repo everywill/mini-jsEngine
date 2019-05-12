@@ -25,6 +25,9 @@ class OptClassInfo extends ClassInfo {
     let methodDef = this.methodDefs[index]
     return new OptMethod(methodDef.parameters,methodDef.body, this.environment, optStoneObject)
   }
+  setMethods(methodDefs) {
+    this.methodDefs = methodDefs
+  }
 }
 
 module.exports = OptClassInfo
