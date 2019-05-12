@@ -8,7 +8,8 @@ const ClassStmntEval = mixin({
     let fieldsSyms = new MemberSymbols(methodSyms, MemberSymbols.FIELD)
 
     let optClassInfo = new OptClassInfo(this, env, methodSyms, fieldsSyms)
-    env.put(this.name, optClassInfo)
+    env.put(0, this.index, optClassInfo)
+    // env.put(this.name, optClassInfo)
 
     let methodDefs = []
 

@@ -5,7 +5,7 @@ const NameEval = mixin({
     // console.log(`eval name ${this.name}:`)
     // console.log(`index in env: ${this.index}`)
     let value
-    if (this.index !== -1) {
+    if (this.index !== undefined) {
       value = env.get(this.nestHierarchy, this.index)
     } else {
       value = env.get(this.name)
@@ -16,7 +16,7 @@ const NameEval = mixin({
   evalForAssign(env, rvalue) {
     // console.log(`evalForAssign name ${this.name}`)
     // console.log(`index in env: ${this.index}`)
-    if (this.index !== -1) {
+    if (this.index !== undefined) {
       env.put(this.nestHierarchy, this.index, rvalue)
     }  else {
       env.put(this.name, rvalue)

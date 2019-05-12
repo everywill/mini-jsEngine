@@ -3,7 +3,9 @@ const { MemberSymbols } = require('../../../../optimizer/Symbols')
 
 const NameEval = mixin({
   eval(env) {
-    if (this.index === -1) {
+    // console.log(`${this.name}: ${this.index}`)
+    // console.log(env.names.nameTable)
+    if (this.index === undefined) {
       return env.get(this.name)
     } else if (this.nestHierarchy === MemberSymbols.FIELD) {
       return this.getThis(env).read(this.index)
@@ -17,8 +19,11 @@ const NameEval = mixin({
     return env.get(0, 0)
   },
   evalForAssign(env, rvalue) {
-    if (this.index === -1) {
+    // console.log(`${this.name}: ${this.index}`)
+    // console.log(env.values)
+    if (this.index === undefined) {
       env.put(this.name, rvalue)
+      // console.log(env.names.nameTable)
     } else if (this.nestHierarchy === MemberSymbols.FIELD) {
       this.getThis(env).write(this.index, rvalue)
     } else if (this.nestHierarchy === MemberSymbols.METHOD) {

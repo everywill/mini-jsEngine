@@ -13,7 +13,9 @@ class ArraySymbolEnv extends ArrayEnv {
     }
     // args = [name]
     let name = args[0]
+    // console.log(`name: ${name}`)
     let index = this.names.find(name)
+    // console.log(`found index: ${index}`)
     if (index === -1) {
       if (this.outer) {
         return this.outer.get(name)

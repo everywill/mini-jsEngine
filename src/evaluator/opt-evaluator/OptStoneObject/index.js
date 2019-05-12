@@ -19,12 +19,13 @@ class OptStoneObject {
   }
   write(mark, value) {
     if (typeof mark === 'number') {
-      this.fields[mark] = value
+      return this.fields[mark] = value
     }
     let index = this.optClassInfo.fieldIndex(mark)
     if (index !== -1) {
       this.fields[index] = value
     } else {
+      // console.log(typeof mark)
       throw new Error(`bad assign: ${mark}`)
     }
   }

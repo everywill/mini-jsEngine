@@ -18,6 +18,9 @@ const BinaryExprEval = mixin({
           target.write(name, rvalue)
           
           return rvalue
+        } else {
+          console.log(this.left.toString())
+          throw new Error('bad assign: target not a OptStoneObject')
         }
       }
     } else {
