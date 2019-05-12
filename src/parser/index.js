@@ -13,6 +13,7 @@ const parsers = {
   classDef: ClassParser,
   array: ArrayParser,
   optClosure: closureParser,
+  optClass: ClassParser
 }
 
 class Parser extends Transform {

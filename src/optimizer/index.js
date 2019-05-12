@@ -14,6 +14,7 @@ const envs = {
   classDef: NestedEnv,
   array: NestedEnv,
   optClosure: ArraySymbolEnv,
+  optClass: ArraySymbolEnv,
 }
 
 class Optimizer extends Transform {
