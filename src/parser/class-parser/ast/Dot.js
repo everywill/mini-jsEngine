@@ -1,6 +1,8 @@
 const ASTList = require('../../ast-root/ASTList')
 const DotEval = require('../../../evaluator/class-evaluator/ast-eval/Dot')
+const OptDotEval = require('../../../evaluator/opt-evaluator/class-opt/ast-eval/Dot')
 
+@OptDotEval
 @DotEval
 class Dot extends ASTList {
   constructor(tokenList) {

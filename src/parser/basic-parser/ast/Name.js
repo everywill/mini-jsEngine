@@ -1,7 +1,10 @@
 const ASTLeaf = require('../../ast-root/ASTLeaf')
 const NameEval = require('../../../evaluator/basic-evaluator/ast-eval/Name')
-const OptNameEval = require('../../../evaluator/opt-evaluator/variable-opt/ast-eval/Name')
+const OptVariableNameEval = require('../../../evaluator/opt-evaluator/variable-opt/ast-eval/Name')
+const OptClassNameEval = require('../../../evaluator/opt-evaluator/class-opt/ast-eval/Name')
 const NameLookup = require('../../../optimizer/variable-opt/ast-lookup/Name')
+
+const OptNameEval = OptClassNameEval || OptVariableNameEval
 
 @NameLookup
 @OptNameEval

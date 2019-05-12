@@ -8,7 +8,7 @@ const BinaryExprEval = mixin({
   computeAssign(env, rvalue) {
     let left = this.left
     if (left instanceof Name) {
-      env.put(left.name, rvalue)
+      left.evalForAssign(env, rvalue)
       return rvalue
     } else if (left instanceof PrimaryExpr) {
       if (left.hasPostfix(0) && left.postfix(0) instanceof Dot) {
