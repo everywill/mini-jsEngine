@@ -13,13 +13,13 @@ const NameEval = mixin({
     // console.log(value)
     return value
   },
-  evalForAssign(env, value) {
+  evalForAssign(env, rvalue) {
     // console.log(`evalForAssign name ${this.name}`)
     // console.log(`index in env: ${this.index}`)
     if (this.index !== -1) {
-      env.put(this.nestHierarchy, this.index, value)
+      env.put(this.nestHierarchy, this.index, rvalue)
     }  else {
-      env.put(this.name, value)
+      env.put(this.name, rvalue)
     }
   }
 })
