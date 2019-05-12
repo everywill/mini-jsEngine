@@ -14,18 +14,38 @@ const BinaryExprEval = mixin({
       if (left.hasPostfix(0) && left.postfix(0) instanceof Dot) {
         let target = left.evalSubExpr(env, 1)
         if (target instanceof OptStoneObject) {
-          let name = left.postfix(0).name
-          target.write(name, rvalue)
-          
-          return rvalue
+          // let name = left.postfix(0).name
+          // target.write(name, rvalue)
+          // return rvalue
+          return this.setField(target, left.postfix(0), rvalue)
         } else {
-          console.log(this.left.toString())
+          // console.log(this.left.toString())
           throw new Error('bad assign: target not a OptStoneObject')
         }
       }
     } else {
       throw 'invalid assignment'
     }
+  },
+  setField(optStoneObject, dot, rvalue) {
+    // let name = dot.name
+    // optStoneObject.write(name, rvalue)
+
+    if (optStoneObject.optClassInfo !== this.optClassInfo) {
+      this.optClassInfo = optStoneObject.optClassInfo
+
+      let member = dot.name
+      
+      let index = this.optClassInfo.fieldIndex(member)
+      if (index === -1) {
+        throw new Error(`bad member access: ${member}`)
+      }
+      this.index = index
+    }
+
+    optStoneObject.write(this.index, rvalue)
+
+    return rvalue
   }
 })
 
