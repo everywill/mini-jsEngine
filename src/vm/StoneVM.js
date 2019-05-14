@@ -38,8 +38,24 @@ class StoneVm {
         break;
       case Opcode.SCONST:
         break;
+      case Opcode.MOVE:
+        break;
+      case Opcode.IFZERO:
+        break;
+      case Opcode.CALL:
+        break;
+      case Opcode.RETURN:
+        break;
+      default:
+        if (this.code[this.pc] > Opcode.LESS) {
+          throw new Error('bad instruction')
+        } else {
+          this.computeNumber()
+        }
+        break;
     }
   }
+  computeNumber() {}
 }
 
 StoneVm.NUMBEROFREG = 6
