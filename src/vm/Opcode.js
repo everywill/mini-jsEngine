@@ -33,6 +33,12 @@ class Opcode {
   static get RETURN() {
     return 9
   }
+  static get SAVE() {
+    return 10
+  }
+  static get RESTORE() {
+    return 11
+  }
   // reverse the sign of register
   static get NEG() {
     return 12
