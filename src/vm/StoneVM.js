@@ -1,5 +1,5 @@
 const Opcode = require('./Opcode')
-const VmFunction = require('./VmFunction')
+const VmFunction = require('../evaluator/vm-evaluator/VmFunction')
 const NativeFunction = require('../evaluator/native-evaluator/NativeFunction')
 
 class StoneVm {
@@ -22,6 +22,10 @@ class StoneVm {
   }
   static get NUMBEROFREG() {
     return 6
+  }
+  static get SAVEAREASIZE() {
+    // 保存寄存器： 6个通用寄存器 + fp + ret
+    return 6 + 2
   }
   static get TRUE() {
     return 1
@@ -172,9 +176,25 @@ class StoneVm {
     }
   }
   saveRegisters() {
+    let size = Opcode.decodeOffset(this.code[this.pc + 1])
+    let dest = size + this.sp
+    for (let i = 0; i < StoneVm.NUMBEROFREG; i++) {
+      this.stack[dest++] = this.registers[i]
+    }
+    this.stack[dest++] = this.fp
+    this.stack[dest++] = this.ret
+    this.fp = this.sp
+    this.sp += size + StoneVm.SAVEAREASIZE
     this.pc += 2
   }
   restoreRegisters() {
+    let dest = Opcode.decodeOffset(this.code[this.pc + 1]) + this.fp
+    for (let i = 0; i < StoneVm.NUMBEROFREG; i++) {
+      this.registers[i] = this.stack[dest++]
+    }
+    this.sp = this.fp
+    this.fp = this.stack[dest++]
+    this.ret = this.stack[dest++]
     this.pc += 2
   }
   computeNumber() {

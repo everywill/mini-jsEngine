@@ -1,4 +1,4 @@
-const FunctionEntity = require('../evaluator/function-evaluator/FunctionEntity')
+const FunctionEntity = require('../../function-evaluator/FunctionEntity')
 
 class VmFunction extends FunctionEntity {
   constructor(parameters, body, env, entry) {

@@ -30,6 +30,12 @@ class ASTList {
   child(i) {
     return this.children[i]
   }
+  // StoneVM
+  compile(code) {
+    for (let child of this.children) {
+      child.compile(code)
+    }
+  }
 }
 
 module.exports = ASTList

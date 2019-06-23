@@ -20,6 +20,8 @@ class ASTLeaf {
   toString() {
     return this.token.value
   }
+  // StoneVM
+  compile(code){}
 }
 
 module.exports = ASTLeaf
