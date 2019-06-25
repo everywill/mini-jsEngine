@@ -4,7 +4,7 @@ const NativeFunction = require('../evaluator/native-evaluator/NativeFunction')
 
 class StoneVm {
   constructor(options) {
-    const { codeSize, stackSize, stringSize, heapMemory, codeBuffer } = options
+    const { codeSize, stackSize, stringSize, heapMemory } = options
     // 栈区
     this.stack = []
     // 字符串常量区
@@ -14,7 +14,7 @@ class StoneVm {
     // 堆区
     this.heap = heapMemory
     // 代码区
-    this.code = new Int8Array(codeBuffer)
+    this.code = new Int8Array(new ArrayBuffer(codeSize))
 
     this.codeSize = codeSize
     this.stackSize = stackSize
