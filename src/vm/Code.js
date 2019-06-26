@@ -7,6 +7,12 @@ class Code {
   get position() {
     return this.codeSize
   }
+  set(short, pos) {
+    let remain = short
+    this.stoneVM.code[pos] = remain >> 8
+    remain = remain - (remain >> 8) << 8
+    this.stoneVM.code[pos + 1] = remain
+  }
   addByte(byte) {
     this.stoneVM.code[this.codeSize++] = byte
   }

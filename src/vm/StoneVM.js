@@ -83,6 +83,10 @@ class StoneVm {
         }
         break
       }
+      // goto
+      case Opcode.GOTO:
+        this.pc += Opcode.readShort(this.pc + 1)
+        break;
       // function call
       case Opcode.CALL:
         this.callFunction()

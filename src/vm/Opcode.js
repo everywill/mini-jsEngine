@@ -25,6 +25,10 @@ class Opcode {
   static get IFZERO() {
     return 6
   }
+  // goto
+  static get GOTO() {
+    return 7
+  }
   // function call
   static get CALL() {
     return 8
