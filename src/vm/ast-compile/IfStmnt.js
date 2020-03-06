@@ -4,19 +4,20 @@ const Opcode = require('../Opcode')
 const IfStmntCompile = mixin({
   compile(code) {
     this.condition.compile(code)
-    let pos = code.position
-    // else的跳转
+
+    const pos = code.position
     code.addByte(Opcode.IFZERO)
     code.addByte(Opcode.encodeRegister(--code.nextReg))
-    code.addShort(Opcode.encodeShortOffset(0)) // 占位
-    let initReg = code.nextReg
+    code.addShort(Opcode.encodeShortOffset(0)) // else的跳转占位
+    const initReg = code.nextReg
     this.thenBlock.compile(code)
-    let pos2 = code.position
+
+    const pos2 = code.position
     code.addByte(Opcode.GOTO)
-    code.addShort(Opcode.encodeShortOffset(0)) // 占位
-    // else的跳转
+    code.addShort(Opcode.encodeShortOffset(0)) // then结束跳转占位
+    // 设置正确else的跳转位置
     code.set(Opcode.encodeShortOffset(code.position - pos), pos + 2)
-    let elseBlock = this.elseBlock
+    const elseBlock = this.elseBlock
     code.nextReg = initReg
     if (elseBlock) {
       elseBlock.compile(code)
@@ -25,6 +26,7 @@ const IfStmntCompile = mixin({
       code.add(0)
       code.addByte(Opcode.encodeRegister(code.nextReg++))
     }
+    // 设置正确then结束跳转
     code.set(Opcode.encodeShortOffset(code.position - pos2), pos2 + 1)
   }
 })

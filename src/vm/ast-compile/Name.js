@@ -4,6 +4,7 @@ const Opcode = require('../Opcode')
 const NameCompile = mixin({
   compile(code) {
     if (this.nestHierarchy > 0) {
+      // no closure for simplicity
       code.addByte(Opcode.GMOVE)
       code.addShort(Opcode.encodeShortOffset(this.index))
       code.addByte(Opcode.encodeRegister(code.nextReg++))
@@ -15,6 +16,7 @@ const NameCompile = mixin({
   },
   compileAssign(code) {
     if (this.nestHierarchy > 0) {
+      // no closure for simplicity
       code.addByte(Opcode.GMOVE)
       code.addByte(Opcode.encodeRegister(code.nextReg - 1))
       code.addShort(Opcode.encodeShortOffset(this.index))

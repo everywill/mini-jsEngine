@@ -8,6 +8,7 @@ class Code {
     return this.codeSize
   }
   set(short, pos) {
+    // set a short value at position [pos]
     let remain = short
     this.stoneVM.code[pos] = remain >> 8
     remain = remain - (remain >> 8) << 8

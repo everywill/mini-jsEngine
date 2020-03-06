@@ -1,7 +1,7 @@
 const StoneVM = require('./StoneVM')
 
-const BIT32_MAXVALUE = Math.pow(2, 32)
-const BIT16_MAXVALUE = Math.pow(2, 16)
+const BIT32_MAXVALUE = Math.pow(2, 32) - 1
+const BIT16_MAXVALUE = Math.pow(2, 16) - 1 
 const BIT16_MINVALUE = -(Math.pow(2, 16) - 1)
 
 class Opcode {
@@ -17,7 +17,7 @@ class Opcode {
   static get MOVE() {
     return 4
   }
-  // move a value between register and heap
+  // move a value between register and heap(global variavle)
   static get GMOVE() {
     return 5
   }

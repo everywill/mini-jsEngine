@@ -25,6 +25,7 @@ class MemberSymbols extends Symbols {
   }
 }
 
+// 针对成员和方法特殊的nestHierarchy
 MemberSymbols.METHOD = -1
 MemberSymbols.FIELD = -2
 

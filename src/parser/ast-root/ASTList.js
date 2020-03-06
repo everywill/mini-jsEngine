@@ -1,4 +1,4 @@
-let ASTListLookup = require('../../optimizer/ast-lookup/ASTList')
+let ASTListLookup = require('../../optimizer/variable-opt/ast-lookup/ASTList')
 
 @ASTListLookup
 class ASTList {
@@ -29,12 +29,6 @@ class ASTList {
   }
   child(i) {
     return this.children[i]
-  }
-  // StoneVM
-  compile(code) {
-    for (let child of this.children) {
-      child.compile(code)
-    }
   }
 }
 

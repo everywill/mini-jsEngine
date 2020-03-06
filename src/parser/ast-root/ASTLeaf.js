@@ -1,4 +1,4 @@
-let ASTLeafLookup = require('../../optimizer/ast-lookup/ASTLeaf')
+let ASTLeafLookup = require('../../optimizer/variable-opt/ast-lookup/ASTLeaf')
 
 @ASTLeafLookup
 class ASTLeaf {
@@ -20,8 +20,6 @@ class ASTLeaf {
   toString() {
     return this.token.value
   }
-  // StoneVM
-  compile(code){}
 }
 
 module.exports = ASTLeaf

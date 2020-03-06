@@ -5,7 +5,12 @@ const PrimaryExprCompile = mixin({
     this.compileSubExpr(code)
   },
   compileSubExpr(code, nestHierarchy) {
-    if ()
+    if (this.hasPostfix(nestHierarchy)) {
+      this.compileSubExpr(code, nestHierarchy + 1);
+      this.postfix(nestHierarchy).compile(code);
+    } else {
+      this.operand.compile(code)
+    }
   }
 })
 
