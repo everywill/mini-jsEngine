@@ -3,8 +3,11 @@ const VmFunction = require('../VmFunction')
 
 const FuncStmntEval = mixin({
   eval(env) {
-    let funcName = this.name
-    env.put(funcName, new VmFunction(this.parameters, this.body, env, entry))
+    const code = env.code
+    const entry = code.position
+    this.compile(code)
+    env.put(0, this.index, new VmFunction(this.parameters, this.body, env, entry))
+    return this.name
   },
 })
 
