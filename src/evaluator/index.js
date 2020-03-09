@@ -1,33 +1,15 @@
 const { Writable } = require('stream')
 const { 
-  BasicEnv,
   NestedEnv,
-  ArraySymbolEnv,
-  nativeFuncWrap,
 } = require('./environment')
-
-const envs = {
-  basic: BasicEnv,
-  func: NestedEnv,
-  closure: NestedEnv,
-  nativeFunc: NestedEnv,
-  classDef: NestedEnv,
-  array: NestedEnv,
-  optClosure: ArraySymbolEnv,
-  optClass: ArraySymbolEnv,
-}
 
 class Evaluator extends Writable {
   constructor(options) {
-    const { evaluator: evaluatorName, ...rest } = options
-    super(Object.assign({}, rest, {
+    super(Object.assign({}, options, {
       objectMode: true,
     }))
 
-    let envClazz = nativeFuncWrap(envs[evaluatorName])
-
-    this.env = new envClazz()
-    this.env.appendNatives()
+    this.env = new NestedEnv()
   }
   _write(chunk, encoding, callback) {
     const {astList} = chunk
