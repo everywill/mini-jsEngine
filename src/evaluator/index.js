@@ -19,12 +19,11 @@ const envs = {
 
 class Evaluator extends Writable {
   constructor(options) {
-    const { evaluator: evaluatorName, ...rest } = options
-    super(Object.assign({}, rest, {
+    super(Object.assign({}, options, {
       objectMode: true,
     }))
 
-    let envClazz = nativeFuncWrap(envs[evaluatorName])
+    let envClazz = nativeFuncWrap(envs.basic)
 
     this.env = new envClazz()
     this.env.appendNatives()
