@@ -75,6 +75,19 @@ class TypedParser {
 
     return new FuncStmnt([name, paramList, body])
   }
+
+  // type tag
+  * typeTag() {
+    let type = []
+    if (yield* this.checkNextToken(':')) {
+      let token = yield* this.nextToken()
+      if (token.type === 'identifier') {
+        type.push(new Name(token))
+      }
+    }
+    return new TypeTag(type);
+  }
+
   // "(" [ param { "," param } ] ")"
   * paramlist() {
     let params = []
@@ -93,17 +106,6 @@ class TypedParser {
 
       return new ParameterList(params)
     }
-  }
-
-  * typeTag() {
-    let type = []
-    if (yield* this.checkNextToken(':')) {
-      let token = yield* this.nextToken()
-      if (token.type === 'identifier') {
-        type.push(new Name(token))
-      }
-    }
-    return new TypeTag(type);
   }
 
   // IDENTIFIER

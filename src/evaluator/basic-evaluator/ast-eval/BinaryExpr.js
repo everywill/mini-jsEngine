@@ -3,14 +3,14 @@ const Name = require('../../../parser/basic-parser/ast/Name')
 
 const BinaryExprEval = mixin({
   eval(env) {
-    let op = this.operator.name
+    const op = this.operator.name
     if (op === '=') {
-      let right = this.right.eval(env)
+      const right = this.right.eval(env)
 
       return this.computeAssign(env, right)
     } else {
-      let left = this.left.eval(env)
-      let right = this.right.eval(env)
+      const left = this.left.eval(env)
+      const right = this.right.eval(env)
 
       return this.computeOp(left, op, right)
     }
