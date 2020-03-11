@@ -62,6 +62,7 @@ class TypedParser {
   * func() {
     let name
     let paramList
+    let retType
     let body
     // IDENTIFIER
     let token = yield* this.nextToken()
@@ -72,9 +73,10 @@ class TypedParser {
     }
 
     paramList = yield* this.paramlist()
+    retType = yield* this.typeTag()
     body = yield* this.block()
 
-    return new FuncStmnt([name, paramList, body])
+    return new FuncStmnt([name, paramList, retType, body])
   }
 
   // type tag

@@ -18,11 +18,14 @@ class FuncStmnt extends ASTList {
   get parameters() {
     return this.child(1)
   }
-  get body() {
+  get type() {
     return this.child(2)
   }
+  get body() {
+    return this.child(3)
+  }
   toString() {
-    return `(func ${this.name} ${this.parameters} ${this.body})`
+    return `(func ${this.name} ${this.parameters} ${this.type} ${this.body})`
   }
 }
 

@@ -3,6 +3,20 @@ const UnknownType = require('./UnknownType')
 const { TypeTag }= require('../../parser/typed-parser/ast')
 
 class TypeInfo {
+  static getTypeInfo(typeTag) {
+    const typeName = typeTag.type 
+    if (typeName === TypeInfo.INT.toString()) {
+      return TypeInfo.INT
+    } else if (typeName === TypeInfo.STRING.toString()) {
+      return TypeInfo.STRING
+    } else if (typeName === TypeInfo.ANY.toString()) {
+      return TypeInfo.ANY
+    } else if (typeName === TypeTag.UNDEF) {
+      return new UnknownType()
+    }
+    throw new Error(`unknown type ${typeName}`)
+  }
+  
   match(typeInfo) {
     return this === typeInfo
   }
@@ -37,19 +51,6 @@ class TypeInfo {
   }
   toFunctionType() {
     return null
-  }
-  getTypeInfo(typeTag) {
-    const typeName = typeTag.type 
-    if (typeName === TypeInfo.INT.toString()) {
-      return TypeInfo.INT
-    } else if (typeName === TypeInfo.STRING.toString()) {
-      return TypeInfo.STRING
-    } else if (typeName === TypeInfo.ANY.toString()) {
-      return TypeInfo.ANY
-    } else if (typeName === TypeTag.UNDEF) {
-      return new UnknownType()
-    }
-    throw new Error(`unknown type ${typeName}`)
   }
 }
 
