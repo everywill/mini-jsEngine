@@ -13,6 +13,8 @@ const Arguments = require('./Arguments')
 const PrimaryExpr = require('./PrimaryExpr')
 const TypeTag = require('./TypeTag')
 
+const Param = require('./Param')
+
 module.exports = {
   StringLiteral,
   NumberLiteral,
@@ -28,4 +30,5 @@ module.exports = {
   Arguments,
   PrimaryExpr,
   TypeTag,
+  Param
 }

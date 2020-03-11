@@ -14,7 +14,10 @@ class ParameterList extends ASTList {
     return this.numChildren
   }
   name(i) {
-    return this.child(i).name
+    return this.child(i).child(0).name
+  }
+  typeTag(i) {
+    return this.child(i).child(1)
   }
 }
 

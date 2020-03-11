@@ -1,3 +1,7 @@
+const FunctionType = require('./FunctionType')
+const UnknownType = require('./UnknownType')
+const { TypeTag }= require('../../parser/typed-parser/ast')
+
 class TypeInfo {
   match(typeInfo) {
     return this === typeInfo
@@ -18,6 +22,34 @@ class TypeInfo {
     } else {
       return TypeInfo.ANY
     }
+  }
+  union(rightTypeInfo, typeEnv) {
+    if (this.match(rightTypeInfo)) {
+      return this
+    }
+    return TypeInfo.ANY
+  }
+  functionType(retTypeInfo, paramsTypeInfo) {
+    return new FunctionType(retTypeInfo, paramsTypeInfo)
+  }
+  isFunctionType() {
+    return false
+  }
+  toFunctionType() {
+    return null
+  }
+  getTypeInfo(typeTag) {
+    const typeName = typeTag.type 
+    if (typeName === TypeInfo.INT.toString()) {
+      return TypeInfo.INT
+    } else if (typeName === TypeInfo.STRING.toString()) {
+      return TypeInfo.STRING
+    } else if (typeName === TypeInfo.ANY.toString()) {
+      return TypeInfo.ANY
+    } else if (typeName === TypeTag.UNDEF) {
+      return new UnknownType()
+    }
+    throw new Error(`unknown type ${typeName}`)
   }
 }
 

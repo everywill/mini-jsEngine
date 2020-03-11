@@ -12,6 +12,7 @@ const {
   Arguments,
   PrimaryExpr,
   TypeTag,
+  Param,
 } = require('./ast')
 
 class TypedParser {
@@ -108,11 +109,14 @@ class TypedParser {
     }
   }
 
-  // IDENTIFIER
+  // IDENTIFIER [ type_tag ]
   * param() {
+    const result = []
     let token = yield* this.nextToken()
     if (token.type === 'identifier') {
-      return new Name(token)
+      result.push(new Name(token))
+      result.push(yield* this.typeTag())
+      return new Param(result)
     } else {
       this.queue.push(token)
       return null
