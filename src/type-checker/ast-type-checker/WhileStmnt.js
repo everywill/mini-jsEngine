@@ -7,7 +7,8 @@ const WhileStmntTypeChecker = mixin({
     condType.assertSubtypeOf(TypeInfo.INT, typeEnv, this)
 
     const bodyType = this.body.typeCheck(typeEnv)
-    return bodyType
+    // 如果未进入while循环，返回为0
+    return bodyType.union(TypeInfo.INT, typeEnv)
   }
 })
 

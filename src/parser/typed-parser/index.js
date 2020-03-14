@@ -13,6 +13,7 @@ const {
   PrimaryExpr,
   TypeTag,
   Param,
+  VarStmnt,
 } = require('./ast')
 
 class TypedParser {
@@ -166,6 +167,12 @@ class TypedParser {
     } else if (yield* this.checkNextToken('func')) {
       // 增加函数解析
       return yield* this.func()
+    } else if (yield* this.checkNextToken('var')) {
+      let token = yield* this.nextToken()
+      const name = new Name(token)
+      const type = yield* this.typeTag()
+      const initializer = yield* this.expression()
+      return new VarStmnt([name, type, initializer])
     } else {
       return yield* this.expression()
     }

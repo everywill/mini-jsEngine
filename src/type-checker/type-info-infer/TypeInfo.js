@@ -26,24 +26,36 @@ class TypeInfo {
     return this === superTypeInfo || superTypeInfo === TypeInfo.ANY
   }
   assertSubtypeOf(typeInfo, typeEnv, ASTree) {
-    if (!this.subtypeOf(typeInfo)) {
-      throw new Error(`type mismatch: cannot convert from ${this} to ${typeInfo}, ${ASTree}`)
+    if (typeInfo.isUnknownType()) {
+      typeInfo.assertSupertypeOf(this, typeEnv, ASTree)
+    } else {
+      if (!this.subtypeOf(typeInfo)) {
+        throw new Error(`type mismatch: cannot convert from ${this} to ${typeInfo}, ${ASTree}`)
+      }
     }
   }
   plus(rightTypeInfo, typeEnv) {
-    if (TypeInfo.INT.match(this) && TypeInfo.INT.match(rightTypeInfo)) {
-      return TypeInfo.INT
-    } else if (TypeInfo.STRING.match(this) || TypeInfo.STRING.match(rightTypeInfo)) {
-      return TypeInfo.STRING
+    if (rightTypeInfo.isUnknownType()) {
+      return rightTypeInfo.plus(this, typeEnv)
     } else {
-      return TypeInfo.ANY
+      if (TypeInfo.INT.match(this) && TypeInfo.INT.match(rightTypeInfo)) {
+        return TypeInfo.INT
+      } else if (TypeInfo.STRING.match(this) || TypeInfo.STRING.match(rightTypeInfo)) {
+        return TypeInfo.STRING
+      } else {
+        return TypeInfo.ANY
+      }
     }
   }
   union(rightTypeInfo, typeEnv) {
-    if (this.match(rightTypeInfo)) {
-      return this
+    if (rightTypeInfo.isUnknownType()) {
+      return rightTypeInfo.union(this, typeEnv)
+    } else {
+      if (this.match(rightTypeInfo)) {
+        return this
+      }
+      return TypeInfo.ANY
     }
-    return TypeInfo.ANY
   }
   functionType(retTypeInfo, paramsTypeInfo) {
     return new FunctionType(retTypeInfo, paramsTypeInfo)

@@ -12,6 +12,7 @@ const FuncStmnt = require('./FuncStmnt')
 const Arguments = require('./Arguments')
 const PrimaryExpr = require('./PrimaryExpr')
 const TypeTag = require('./TypeTag')
+const VarStmnt = require('./VarStmnt')
 
 const Param = require('./Param')
 
@@ -30,5 +31,6 @@ module.exports = {
   Arguments,
   PrimaryExpr,
   TypeTag,
-  Param
+  Param,
+  VarStmnt,
 }
